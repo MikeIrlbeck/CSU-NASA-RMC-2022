@@ -1,0 +1,44 @@
+
+#include <Sabertooth.h>
+#include <SabertoothSimplified.h>
+#include <ros.h>
+#include <std_msgs/Bool.h>
+
+Sabertooth ST(128); // The Sabertooth is on address 128.
+
+ros::NodeHandle nh;  // instantiate the node handle, 
+std_msgs::Bool motor_msg;
+
+
+ros::Publisher pub_motor("Bmotor", &motor_msg);
+                                     
+void setup()
+{
+nh.initNode();
+nh.advertise(pub_motor);
+
+  
+  SabertoothTXPinSerial.begin(9600); // 9600 is the default baud rate for Sabertooth packet serial.
+  ST.autobaud();
+
+  //sets the drive and turn states to 0 so the motors start at 0
+  ST.drive(0);
+  ST.turn(0);
+ 
+
+}
+
+
+void loop()
+{
+ 
+  
+  pub_motor.publish(&motor_msg);
+  
+  ST.drive(30);
+  delay(2000);
+  exit(0);
+  //nh.spinOnce(0);
+  
+  
+}
