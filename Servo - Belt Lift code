@@ -1,0 +1,46 @@
+//this code is for the servo motors that lift the belt up and down
+
+#include <Sabertooth.h>
+#include <SabertoothSimplified.h>
+#define ENCA 2
+#define ENCB 3
+
+const int x_pin = 1;   // A1 pin connected to x output
+const int y_pin = 0;   // A0 pin connected to y output
+
+Sabertooth ST(128);
+
+void setup() 
+{
+  SabertoothTXPinSerial.begin(9600);    //baud rate is 9600
+  ST.autobaud();
+
+  // sets the drive and turn states to zero
+  ST.drive(0);
+  ST.turn(0);
+
+  //analog stick logic
+  pinMode(ENCA, INPUT);
+  pinMode(ENCB, INPUT);
+}
+
+void loop()
+{
+  // makes integer values that read x and y pins
+  int xVal = analogRead(x_pin);
+  int yVal = analogRead(y_pin);
+  int a = analogRead(ENCA);
+  int b = analogRead(ENCB);
+  Serial.print(a*5);
+  Serial.print(" ");
+  Serial.print(b*5);
+  Serial.println();
+
+  //maps input values that range from 0 to 1023 to the values that the motor driver reads, which are -127 to 127
+  int rl = map(xVal, 0, 1023, -127, 127);   //rl refers to right and left
+  int bf = map(yVal, 0, 1023, 0127, 127);   //bf refers to backwards and forwards
+
+  //has the motor driver read the mapped values from rl and bf
+  ST.turn(rl);
+  ST.drive(bf);
+}
