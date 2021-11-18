@@ -1,63 +1,38 @@
-## USB Controller Python Integration
-#NASA Mining Team: Dylan Clem
+#USB Xbox360 controller on LINUX
+# CSU NASAmining: Dylan Clem
+# step one, install xbox360 driver and then python 3 driver
+#pip3 install -U xbox360controller
+#sudo apt install python3-pip
+#https://github.com/linusg/xbox360controller/blob/master/docs/API.md#xbox360controller-parameters
+#The code will run until Ctrl+C is presses.
+#Each time on of the left or right axis is moved, the event will be processed.
+#Additionally, the events of the A button are being processed.
 
-#import evdev on Latte Panda
-#https://core-electronics.com.au/tutorials/using-usb-and-bluetooth-controllers-with-python.html
+import signal
+from xbox360controller import Xbox360Controller
 
-from evdev import InputDevice, categorize, ecodes
 
-#creates object 'gamepad' to store the data
-#you can call it whatever you like
-gamepad = InputDevice('/dev/input/event3')
+def on_button_pressed(button):
+    print('Button {0} was pressed'.format(button.name))
 
-#button code variables (change to suit your device)
-aBtn = 34
-bBtn = 36
-xBtn = 35
-yBtn = 23
 
-up = 46
-down = 32
-left = 18
-right = 33
+def on_button_released(button):
+    print('Button {0} was released'.format(button.name))
 
-start = 24
-select = 49
 
-lTrig = 37
-rTrig = 50
+def on_axis_moved(axis):
+    print('Axis {0} moved to {1} {2}'.format(axis.name, axis.x, axis.y))
 
-#prints out device info at start
-print(gamepad)
+try:
+    with Xbox360Controller(0, axis_threshold=0.2) as controller:
+        # Button A events
+        controller.button_a.when_pressed = on_button_pressed
+        controller.button_a.when_released = on_button_released
 
-#loop and filter by event code and print the mapped label
-for event in gamepad.read_loop():
-    if event.type == ecodes.EV_KEY:
-        if event.value == 1:
-            if event.code == yBtn:
-                print("Y")
-            elif event.code == bBtn:
-                print("B")
-            elif event.code == aBtn:
-                print("A")
-            elif event.code == xBtn:
-                print("X")
+        # Left and right axis move event
+        controller.axis_l.when_moved = on_axis_moved
+        controller.axis_r.when_moved = on_axis_moved
 
-            elif event.code == up:
-                print("up")
-            elif event.code == down:
-                print("down")
-            elif event.code == left:
-                print("left")
-            elif event.code == right:
-                print("right")
-
-            elif event.code == start:
-                print("start")
-            elif event.code == select:
-                print("select")
-
-            elif event.code == lTrig:
-                print("left bumper")
-            elif event.code == rTrig:
-                print("right bumper")
+        signal.pause()
+except KeyboardInterrupt:
+    pass
