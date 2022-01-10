@@ -7,8 +7,8 @@
       <arg name="scan_topic"  value="$(arg scan_topic)" />
       <arg name="base_frame"  value="base_footprint"/>
       <arg name="odom_frame"  value="base_footprint" />
-      <arg name="linearUpdate" value="0.0"/>
-      <arg name="angularUpdate" value="0.0"/>
+      <arg name="linearUpdate" value="0.10"/>
+      <arg name="angularUpdate" value="0.10"/>
   </include>
 
 </launch>
