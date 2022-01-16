@@ -1,0 +1,26 @@
+<launch>
+
+    <!-- to launch USE: roslaunch nasa_rmc urdf_visualize.launch model:='$(find myrobot_package)/urdf/myrobot.urdf' -->
+    <arg name="model" default=""/>
+
+    <param name="robot_description" command="cat $(arg model)" />
+    <!--// Here it is loading the URDF file to the param server variable called "robot_description." Bear in mind that if you are loading more than one robot, you will have to load them in different variables, like "robot1_description" and "robot2_description." -->
+    
+    <!-- send fake joint values -->
+    <!-- <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+    </node> -->
+
+    <node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui">
+    </node>
+
+    
+    <!-- Combine joint values -->
+    <node name="rviz_robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+    <!-- //Start the jointstate publisher and the robotstate publisher. These will publish the TFs of the URDF of the robot links and joints.
+    To know more about how this works, please go to our TF-ROS course. -->
+    
+    <!-- Show in Rviz   -->
+    <!--<node name="rviz" pkg="rviz" type="rviz" args="-d $(find nasa_rmc)/rviz_config/urdf.rviz"/>-->
+    <node name="rviz" pkg="rviz" type="rviz" args=""/>
+    <!-- //Run RVIZ. The part about loading your own RVIZ is commented. The first time you launch this, just save the RVIZ config file and then you will have all that is needed. -->
+</launch>

@@ -1,0 +1,8 @@
+digraph G {
+node [shape=box];
+"base_link" [label="base_link"];
+"wheel_1_link" [label="wheel_1_link"];
+node [shape=ellipse, color=blue, fontcolor=blue];
+"base_link" -> "roll_joint" [label="xyz: 0 0.06 0.01 \nrpy: 0 -0 0"]
+"roll_joint" -> "wheel_1_link"
+}

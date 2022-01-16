@@ -1,0 +1,271 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="moony">
+
+<gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+        <robotNamespace>/moony</robotNamespace>
+    </plugin>
+</gazebo>
+
+<!-- CONSTANTS -->
+<xacro:property name="base_mass" value="4.11" />
+<xacro:property name="base_height" value=".03" />
+<xacro:property name="wheel_mass" value="2" />
+<xacro:property name="wheel_x" value="0.3" />
+<xacro:property name="wheel_y" value="${(.38/2)+.04+.01}" /> 
+<!-- y = width/2 of frame + wheel COG to wall + buffer -->
+<!-- for XACRO math - SPACES matter -->
+<xacro:property name="wheel_z" value="${-0.02 - base_height/2}" />
+<xacro:property name="wheel_r" value="${radians(90)}" />
+<xacro:property name="wheel_p" value="0" />
+<xacro:property name="wheel_y" value="0" />
+<xacro:property name="wheel_inertia_ixx" value="0.02" />
+<xacro:property name="wheel_inertia_iyy" value="0.02" />
+<xacro:property name="wheel_inertia_izz" value="0.04" />
+<xacro:property name="wheel_collision_radius" value="0.17" />
+<xacro:property name="wheel_collision_length" value="0.09" />
+<xacro:property name="wheel_mesh" value="package://moony_description/models/meshes/wheel.dae" />
+<xacro:property name="wheel_effort" value="0.1" />
+<xacro:property name="wheel_velocity" value="1" />
+<xacro:property name="wheel_static_contact_stiffness" value="100000" />
+<xacro:property name="wheel_dynamic_contact_stiffness" value="100000" />
+<xacro:property name="wheel_static_friction_coeff" value="10" />
+<xacro:property name="wheel_dynamic_friction_coeff" value="10" />
+
+<!-- IMPORTS -->
+<!-- Import all Gazebo-customization elements, including Gazebo colors -->
+  <!-- <xacro:include filename="$(find moony_description)/robot/sensors.xacro" /> -->
+  <!-- THIS DID NOT WORK - however it would appear to be -->
+  <!-- Import Rviz colors -->
+  <!-- <xacro:include filename="$(find rrbot_description)/urdf/materials.xacro" /> -->
+
+<!-- MACROS -->
+<xacro:macro name="individual_wheel" params="num x y r">
+   <link name="wheel_${num}_link">
+        <inertial>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <mass value="${wheel_mass}" />
+            <inertia ixx="${wheel_inertia_ixx}" ixy="0" ixz="0" iyy="${wheel_inertia_iyy}" iyz="0" izz="${wheel_inertia_izz}"/>
+             <!-- values taken from solidworks; the origin is the position of the part
+                w.r.t its axes for the second moment of mass values  -->
+        </inertial>
+
+        <collision>
+            <origin rpy="0 0 0" xyz="0 0 0"/> <!-- pre joint orientation -->
+            <geometry>
+                <cylinder radius="${wheel_collision_radius}" length="${wheel_collision_length}"/>
+            </geometry>
+        </collision>
+
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/> <!-- center of the wheel -->
+            <geometry>
+                <mesh filename="${wheel_mesh}"/>
+            </geometry>
+            <!-- <material name="white"/> only used in rviz for simple geometry -->
+        </visual>
+    </link>
+
+        <gazebo reference="wheel_${num}_link">
+            <kp>100000.0</kp>   <!-- kp: This coefficient sets the static contact stiffness -->
+            <kd>100000.0</kd>   <!-- kd: This coefficient sets the dynamic contact stiffness -->
+            <mu1>10.0</mu1>     <!-- mu1: The static friction coefficient -->
+            <mu2>10.0</mu2>     <!-- mu2: The dynamic friction coefficient. -->
+            <!-- <material>Gazebo/Yellow</material> -->
+        </gazebo>
+
+    <joint name="wheel_${num}_joint" type="continuous">
+        <parent link="base_link"/>
+        <child link="wheel_${num}_link"/>
+        <origin xyz="${x} ${y} ${wheel_z}" rpy="${r} ${wheel_p} ${wheel_y}"/> <!-- joint location -->
+        <limit effort="${wheel_effort}" velocity="${wheel_velocity}"/>
+        <axis xyz="0 0 1"/>
+    </joint>
+
+    <transmission name="wheel_tran_${num}">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="wheel_${num}_joint">
+            <hardwareInterface>hardware_interference/VelocityJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="wheel_motor_${num}">
+            <hardwareInterface>VelocityJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+</xacro:macro>
+
+<xacro:macro name="differential_drive" params="prefix left right">
+    <gazebo>
+    <plugin name="${prefix}_differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
+
+        <!-- Plugin update rate in Hz -->
+        <updateRate>50</updateRate>
+
+        <!-- Name of left joint, defaults to `left_joint` -->
+        <leftJoint>wheel_${left}_link</leftJoint>
+
+        <!-- Name of right joint, defaults to `right_joint` -->
+        <rightJoint>wheel_${right}_link</rightJoint>
+
+        <!-- The distance from the center of one wheel to the other, in meters, defaults to 0.34 m -->
+        <wheelSeparation>${2 * wheel_y}</wheelSeparation>
+
+        <!-- Diameter of the wheels, in meters, defaults to 0.15 m -->
+        <wheelDiameter>${wheel_collision_radius}</wheelDiameter>
+
+        <!-- Wheel acceleration, in rad/s^2, defaults to 0.0 rad/s^2 -->
+        <wheelAcceleration>1.0</wheelAcceleration>
+
+        <!-- Maximum torque which the wheels can produce, in Nm, defaults to 5 Nm -->
+        <wheelTorque>20</wheelTorque>
+
+        <!-- Topic to receive geometry_msgs/Twist message commands, defaults to `cmd_vel` -->
+        <commandTopic>/moony/cmd_vel</commandTopic>
+
+        <!-- Topic to publish nav_msgs/Odometry messages, defaults to `odom` -->
+        <odometryTopic>odom</odometryTopic>
+
+        <!-- Odometry frame, defaults to `odom` -->
+        <odometryFrame>odom</odometryFrame>
+
+        <!-- Robot frame to calculate odometry from, defaults to `base_footprint` -->
+        <robotBaseFrame>base_link</robotBaseFrame>
+
+        <!-- Odometry source, 0 for ENCODER, 1 for WORLD, defaults to WORLD -->
+        <odometrySource>1</odometrySource>
+
+        <!-- Set to true to publish transforms for the wheel links, defaults to false -->
+        <publishWheelTF>true</publishWheelTF>
+
+        <!-- Set to true to publish transforms for the odometry, defaults to true -->
+        <publishOdom>true</publishOdom>
+
+        <!-- Set to true to publish sensor_msgs/JointState on /joint_states for the wheel joints, defaults to false -->
+        <publishWheelJointState>true</publishWheelJointState>
+
+        <!-- Set to true to swap right and left wheels, defaults to true -->
+        <legacyMode>false</legacyMode>
+    </plugin>
+    </gazebo>
+</xacro:macro>
+
+<!-- note: units are meters, kilograms, and radians -->
+
+    <link name="dummy">
+    </link>
+
+    <joint name="dummy_joint" type="fixed">
+     <parent link="dummy"/>
+     <child link="base_link"/>
+   </joint>
+
+    <link name="base_link">
+        <inertial>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <mass value="${base_mass}" />
+            <inertia ixx="0.1" ixy="0" ixz="0" iyy="0.62" iyz="0" izz="0.52"/>
+             <!-- values taken from solidworks  -->
+        </inertial>
+        <collision>
+            <origin rpy="0 0 0" xyz="0 0 0"/> <!-- center of the wheel -->
+            <geometry>
+                <box size="1 .38 ${base_height}"/> -->
+            </geometry>
+        </collision>
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+                <!-- <box size="1 .38 .03"/> -->
+                <mesh filename="package://moony_description/models/meshes/frame.dae"/>
+            </geometry>
+        </visual>
+    </link>
+
+   <xacro:individual_wheel num="1" x="${1.0 * wheel_x}" y="${1.0 * .24}" r="${-1 * wheel_r}"/>
+   <xacro:individual_wheel num="2" x="${-1.0 * wheel_x}" y="${1.0 * .24}" r="${-1 * wheel_r}"/>
+   <xacro:individual_wheel num="3" x="${1.0 * wheel_x}" y="${-1.0 * .24}" r="${1 * wheel_r}"/>
+   <xacro:individual_wheel num="4" x="${-1.0 * wheel_x}" y="${-1.0 * .24}" r="${1 * wheel_r}"/>
+   
+   <xacro:differential_drive prefix="front" left="1" right="2"/>
+   <xacro:differential_drive prefix="back" left="3" right="4"/>
+
+     <!-- Base Link -->
+  <link name="lidar_link">
+    <collision>
+      <origin xyz="0 0 ${.05/2}" rpy="0 0 0"/>
+      <geometry>
+        <!-- <box size="0.1 0.05 0.005"/> -->
+        <cylinder radius="${0.025}" length=".05"/>
+        <!-- ${0.05+.005} -->
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://moony_description/models/meshes/lidar.dae"/>
+      </geometry>
+    </visual>
+
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value=".077"/>
+      <inertia
+        ixx=".00007" ixy="0.0" ixz="0.0"
+        iyy=".00003" iyz="0.0"
+        izz=".00008"/>
+    </inertial>
+  </link>
+
+    <gazebo reference="lidar_link">
+        <kp>100000.0</kp>   <!-- kp: This coefficient sets the static contact stiffness -->
+        <kd>100000.0</kd>   <!-- kd: This coefficient sets the dynamic contact stiffness -->
+        <mu1>10.0</mu1>     <!-- mu1: The static friction coefficient -->
+        <mu2>10.0</mu2>     <!-- mu2: The dynamic friction coefficient. -->
+    </gazebo>
+
+    <joint name="lidar_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="lidar_link"/>
+        <origin xyz=".47 0 ${-0.015 - 0.005/2 -0.001}" rpy="${radians(180)} 0 0"/> <!-- joint location -->
+    </joint>
+
+<!-- lidar sensor -->
+  <gazebo reference="lidar_link">
+    <sensor type="ray" name="front_rplidar_sensor">
+      <pose>0 0 0 0 0 0</pose>
+      <visualize>true</visualize>
+      <update_rate>40</update_rate>
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>720</samples>
+            <resolution>1</resolution>
+            <min_angle>${-radians(360)}</min_angle>
+            <max_angle>${radians(360)}</max_angle>
+          </horizontal>
+        </scan>
+        <range>
+          <min>0.10</min>
+          <max>30.0</max>
+          <resolution>0.01</resolution>
+        </range>
+        <noise>
+          <type>gaussian</type>
+          <!-- Noise parameters based on published spec for Hokuyo laser
+               achieving "+-30mm" accuracy at range < 10m.  A mean of 0.0m and
+               stddev of 0.01m will put 99.7% of samples within 0.03m of the true
+               reading. -->
+          <mean>0.0</mean>
+          <stddev>0.01</stddev>
+        </noise>
+      </ray>
+      <plugin name="gazebo_ros_front_rplidar_controller" filename="libgazebo_ros_laser.so">
+        <topicName>/moony/laser/scan</topicName>
+        <frameName>lidar_link</frameName>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+   
+</robot>
