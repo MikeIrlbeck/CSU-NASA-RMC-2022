@@ -1,108 +1,32 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="moony">
+<!-- note: units are meters, kilograms, and radians -->
 
-<xacro:include filename="$(find moony_gazebo)/gazebo/sensors.xacro" />
+<!-- THIS PLUGIN NEEDS TO BE FIRST -->
+<gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+        <robotNamespace>/moony</robotNamespace>
+    </plugin>
+</gazebo>
 
 <!-- CONSTANTS -->
 <xacro:property name="base_mass" value="4.11" />
 <xacro:property name="base_height" value=".03" />
-<xacro:property name="wheel_mass" value="2" />
-<xacro:property name="wheel_x" value="0.3" />
-<xacro:property name="wheel_y" value="${(.38/2)+.04+.01}" /> 
-<!-- y = width/2 of frame + wheel COG to wall + buffer -->
-<!-- for XACRO math - SPACES matter -->
-<xacro:property name="wheel_z" value="${-0.02 - base_height/2}" />
-<xacro:property name="wheel_r" value="${radians(90)}" />
-<xacro:property name="wheel_p" value="0" />
-<xacro:property name="wheel_y" value="0" />
-<xacro:property name="wheel_inertia_ixx" value="0.02" />
-<xacro:property name="wheel_inertia_iyy" value="0.02" />
-<xacro:property name="wheel_inertia_izz" value="0.04" />
-<xacro:property name="wheel_collision_radius" value="0.17" />
-<xacro:property name="wheel_collision_length" value="0.09" />
-<xacro:property name="wheel_mesh" value="package://moony_description/models/meshes/wheel.dae" />
-<xacro:property name="wheel_effort" value="0.1" />
-<xacro:property name="wheel_velocity" value="1" />
-<xacro:property name="wheel_static_contact_stiffness" value="100000" />
-<xacro:property name="wheel_dynamic_contact_stiffness" value="100000" />
-<xacro:property name="wheel_static_friction_coeff" value="10" />
-<xacro:property name="wheel_dynamic_friction_coeff" value="10" />
 
 <!-- IMPORTS -->
-<!-- Import all Gazebo-customization elements, including Gazebo colors -->
-  <!-- <xacro:include filename="$(find moony_description)/robot/sensors.xacro" /> -->
-  <!-- THIS DID NOT WORK - you need to have the additional xacro with the proper headers: xml version and robot declaration -->
-  <!-- Import Rviz colors -->
-  <!-- <xacro:include filename="$(find rrbot_description)/urdf/materials.xacro" /> -->
+<xacro:include filename="$(find moony_gazebo)/gazebo/sensors.xacro" />
+<xacro:include filename="$(find moony_gazebo)/gazebo/macros.xacro" />
+<xacro:include filename="$(find moony_gazebo)/gazebo/skid_drive.xacro" />
 
-<!-- MACROS -->
-<xacro:macro name="individual_wheel" params="num x y r">
-   <link name="wheel_${num}_link">
-        <inertial>
-            <origin rpy="0 0 0" xyz="0 0 0"/>
-            <mass value="${wheel_mass}" />
-            <inertia ixx="${wheel_inertia_ixx}" ixy="0" ixz="0" iyy="${wheel_inertia_iyy}" iyz="0" izz="${wheel_inertia_izz}"/>
-             <!-- values taken from solidworks; the origin is the position of the part
-                w.r.t its axes for the second moment of mass values  -->
-        </inertial>
-
-        <collision>
-            <origin rpy="0 0 0" xyz="0 0 0"/> <!-- pre joint orientation -->
-            <geometry>
-                <cylinder radius="${wheel_collision_radius}" length="${wheel_collision_length}"/>
-            </geometry>
-        </collision>
-
-        <visual>
-            <origin rpy="0 0 0" xyz="0 0 0"/> <!-- center of the wheel -->
-            <geometry>
-                <mesh filename="${wheel_mesh}"/>
-            </geometry>
-            <!-- <material name="white"/> only used in rviz for simple geometry -->
-        </visual>
-    </link>
-
-        <gazebo reference="wheel_${num}_link">
-            <kp>100000.0</kp>   <!-- kp: This coefficient sets the static contact stiffness -->
-            <kd>100000.0</kd>   <!-- kd: This coefficient sets the dynamic contact stiffness -->
-            <mu1>10.0</mu1>     <!-- mu1: The static friction coefficient -->
-            <mu2>10.0</mu2>     <!-- mu2: The dynamic friction coefficient. -->
-            <!-- <material>Gazebo/Yellow</material> -->
-        </gazebo>
-
-    <joint name="wheel_${num}_joint" type="continuous">
-        <parent link="base_link"/>
-        <child link="wheel_${num}_link"/>
-        <origin xyz="${x} ${y} ${wheel_z}" rpy="${r} ${wheel_p} ${wheel_y}"/> <!-- joint location -->
-        <limit effort="${wheel_effort}" velocity="${wheel_velocity}"/>
-        <axis xyz="0 0 1"/>
-    </joint>
-
-    <transmission name="wheel_tran_${num}">
-        <type>transmission_interface/SimpleTransmission</type>
-        <joint name="wheel_${num}_joint">
-            <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
-        </joint>
-        <actuator name="wheel_motor_${num}">
-            <hardwareInterface>VelocityJointInterface</hardwareInterface>
-            <mechanicalReduction>1</mechanicalReduction>
-        </actuator>
-    </transmission>
-</xacro:macro>
-
-
-
-<!-- note: units are meters, kilograms, and radians -->
-
-    <link name="base_footprint" />
+<!-- LINKS -->
+    <link name="base_footprint" /> <!-- dummy prevents laser from publishing -->
 
     <joint name="base_joint" type="fixed">
-     <origin xyz="0 0 .1" rpy="0 0 0" />
+     <origin xyz="0 0 0" rpy="0 0 0" />
      <parent link="base_footprint"/>
      <child link="base_link"/>
    </joint>
-        <!-- dummy prevents laser from publishing -->
-
+        
     <link name="base_link">
         <inertial>
             <origin rpy="0 0 0" xyz="0 0 0"/>
@@ -125,14 +49,10 @@
         </visual>
     </link>
 
-   <xacro:individual_wheel num="1" x="${1.0 * wheel_x}" y="${1.0 * .24}" r="${-1 * wheel_r}"/>
-   <xacro:individual_wheel num="2" x="${-1.0 * wheel_x}" y="${1.0 * .24}" r="${-1 * wheel_r}"/>
-   <xacro:individual_wheel num="3" x="${1.0 * wheel_x}" y="${-1.0 * .24}" r="${1 * wheel_r}"/>
-   <xacro:individual_wheel num="4" x="${-1.0 * wheel_x}" y="${-1.0 * .24}" r="${1 * wheel_r}"/>
-   <!-- <xacro:individual_wheel num="1" x="0" y="0" r="${-1 * wheel_r}"/> -->
-
-   <!-- <xacro:differential_drive prefix="front" left="1" right="3"/> -->
-   <!-- <xacro:differential_drive prefix="back" left="2" right="4"/> -->
+   <xacro:individual_wheel num="1" x="1.0" y="1.0" r="-1.0"/>
+   <xacro:individual_wheel num="2" x="-1.0" y="1.0" r="-1.0"/>
+   <xacro:individual_wheel num="3" x="1.0" y="-1.0" r="1.0"/>
+   <xacro:individual_wheel num="4" x="-1.0" y="-1.0" r="1.0"/>
 
      <!-- Lidar Link -->
   <link name="lidar_link">
@@ -144,14 +64,12 @@
         <!-- ${0.05+.005} -->
       </geometry>
     </collision>
-
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
         <mesh filename="package://moony_description/models/meshes/lidar.dae"/>
       </geometry>
     </visual>
-
     <inertial>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <mass value=".077"/>

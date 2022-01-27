@@ -1,12 +1,6 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="moony">
 
-<gazebo>
-    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
-        <robotNamespace>/moony</robotNamespace>
-    </plugin>
-</gazebo>
-
 <gazebo reference="lidar_link">
        <kp>100000.0</kp>   <!-- kp: This coefficient sets the static contact stiffness -->
         <kd>100000.0</kd>   <!-- kd: This coefficient sets the dynamic contact stiffness -->

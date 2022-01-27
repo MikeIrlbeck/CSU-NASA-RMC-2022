@@ -53,7 +53,7 @@
         <visual>
             <origin rpy="0 0 0" xyz="0 0 0"/> <!-- center of the wheel -->
             <geometry>
-                <mesh filename="package://moony_description/models/meshes/wheel.dae"/>
+                <mesh filename="package://moony_description/models/meshes/wheel_left.dae"/>
             </geometry>
             <!-- <material name="white"/> only used in rviz for simple geometry -->
         </visual>

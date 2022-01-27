@@ -4,7 +4,7 @@
         <arg name="x" value="0.0" />
         <arg name="y" value="0.0" />
         <arg name="z" value=".5" />
-        <arg name="urdf_robot_file" value="$(find moony_description)/urdf/robot_gazebo.urdf" />
+        <arg name="urdf_robot_file" value="$(find moony_description)/urdf/robot_gazebo_simple.urdf" />
         <arg name="robot_name" value="moony" />
     </include>
 </launch>

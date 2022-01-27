@@ -4,17 +4,25 @@
 <gazebo>
   <plugin name="skid_steer_drive_controller" filename="libgazebo_ros_skid_steer_drive.so">
     <updateRate>100.0</updateRate>
-    <robotNamespace>/</robotNamespace>
-    <leftFrontJoint>front_left_wheel_joint</leftFrontJoint>
-    <rightFrontJoint>front_right_wheel_joint</rightFrontJoint>
-    <leftRearJoint>back_left_wheel_joint</leftRearJoint>
-    <rightRearJoint>back_right_wheel_joint</rightRearJoint>
-    <wheelSeparation>0.4</wheelSeparation>
-    <wheelDiameter>0.215</wheelDiameter>
+    <robotNamespace>/moony</robotNamespace>
+    <leftFrontJoint>wheel_1_joint</leftFrontJoint>
+    <rightFrontJoint>wheel_3_joint</rightFrontJoint>
+    <leftRearJoint>wheel_2_joint</leftRearJoint>
+    <rightRearJoint>wheel_4_joint</rightRearJoint>
+    <wheelSeparation>${wheel_y * 2}</wheelSeparation>
+    <wheelDiameter>${wheel_collision_radius}</wheelDiameter>
     <robotBaseFrame>base_link</robotBaseFrame>
+    <topicName>/moony/cmd_vel</topicName>
+    <commandTopic>/moony/cmd_vel</commandTopic>
     <torque>20</torque>
-    <topicName>cmd_vel</topicName>
+    <odometryTopic>odom</odometryTopic>
+    <odometryFrame>odom</odometryFrame>
     <broadcastTF>false</broadcastTF>
+    <covariance_x>0.000100</covariance_x>
+    <covariance_y>0.000100</covariance_y>
+    <covariance_yaw>0.010000</covariance_yaw>
+    
+    
   </plugin>
 </gazebo>
 
