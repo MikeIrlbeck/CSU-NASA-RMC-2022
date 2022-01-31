@@ -16,7 +16,7 @@
       <pose>-2.0 7.0 0 0 0 0</pose>
     </include> -->
 
-      <population name="ball_population1">
+      <!-- <population name="ball_population1">
         <model name="ball">
             <static>false</static>
             <link name="ball_body">
@@ -44,7 +44,7 @@
         <distribution>
             <type>random</type>
         </distribution>
-    </population>
+    </population> -->
  
  
   </world>

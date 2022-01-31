@@ -39,8 +39,8 @@
         <gazebo reference="wheel_${num}_link">
             <kp>1000000.0</kp>   <!-- kp: This coefficient sets the static contact stiffness -->
             <kd>1.0</kd>   <!-- kd: This coefficient sets the dynamic contact stiffness -->
-            <mu1>3</mu1>     <!-- mu1: The static friction coefficient -->
-            <mu2>1</mu2>     <!-- mu2: The dynamic friction coefficient. -->
+            <mu1>2</mu1>     <!-- mu1: The static friction coefficient -->
+            <mu2>0.5</mu2>     <!-- mu2: The dynamic friction coefficient. -->
             <fdir1 value="1 0 0"/>
             <!-- <material>Gazebo/Yellow</material> -->
             <!-- THE VALUES HERE ARE CRITICAL TO SIM BEHAVIOR -->
