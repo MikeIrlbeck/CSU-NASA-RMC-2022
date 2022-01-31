@@ -57,10 +57,10 @@
     <transmission name="wheel_tran_${num}">
         <type>transmission_interface/SimpleTransmission</type>
         <joint name="wheel_${num}_joint">
-            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
         </joint>
         <actuator name="wheel_motor_${num}">
-            <hardwareInterface>EffortJointInterface</hardwareInterface>
+            <hardwareInterface>VelocityJointInterface</hardwareInterface>
             <mechanicalReduction>1</mechanicalReduction>
         </actuator>
         <!-- previous interface: VelocityJointInterface , EffortJointInterface-->
