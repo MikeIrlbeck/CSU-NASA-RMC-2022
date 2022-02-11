@@ -10,6 +10,7 @@ http://wiki.ros.org/slam_gmapping/Tutorials/MappingFromLoggedData
 - rosparam set use_sim_time true
 - rosrun gmapping slam_gmapping scan:=base_scan
 3. Terminal three - play the bag of saved data
+- roscd moony_2dnav_simulation/bag
 - rosbag play --clock basic_localization_stage.bag
 4. Optional, Terminal four: visualize the data (you can add laser scan data and map data)
 - rosrun rviz rviz
