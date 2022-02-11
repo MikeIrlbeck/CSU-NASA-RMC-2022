@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<launch>
+<!-- source: https://github.com/ipa320/cob_navigation/blob/indigo_dev/cob_navigation_slam/launch/rviz.launch -->
+  <!-- start rviz with configuration -->
+  <node pkg="rviz" type="rviz" name="$(anon rviz)" args="-d $(find moony_description)/rviz_config/lidar_map.rviz" respawn="false" output="screen" />
+
+</launch>
