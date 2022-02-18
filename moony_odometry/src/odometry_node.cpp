@@ -54,7 +54,7 @@ int main(int argc, char **argv) {
     // since all odometry is 6DOF we'll need a quaternion created from yaw
     geometry_msgs::Quaternion odom_quat = tf::createQuaternionMsgFromYaw(th);
 
-    auto child = "base_link"; // old C style array? ends with a null character
+    auto child = "base_footprint"; // old C style array? ends with a null character
 
     // first, we'll publish the transform over tf
     geometry_msgs::TransformStamped odom_trans;

@@ -15,19 +15,19 @@
 
 <!-- IMPORTS -->
 <xacro:include filename="$(find moony_gazebo)/gazebo/sensors.xacro" />
-<xacro:include filename="$(find moony_gazebo)/gazebo/macros.xacro" />
+<xacro:include filename="$(find moony_gazebo)/gazebo/wheels.xacro" />
 <xacro:include filename="$(find moony_gazebo)/gazebo/skid_drive.xacro" />
 
 <!-- LINKS -->
-    <link name="base_link" /> <!-- dummy prevents laser from publishing -->
+    <link name="base_footprint" /> <!-- dummy prevents laser from publishing -->
 
     <joint name="base_joint" type="fixed">
      <origin xyz="0 0 0.01" rpy="0 0 0" />
-     <parent link="base_link"/>
-     <child link="body_link"/>
+     <parent link="base_footprint"/>
+     <child link="base_link"/>
    </joint>
         
-    <link name="body_link">
+    <link name="base_link">
         <inertial>
             <origin rpy="0 0 0" xyz="0 0 0"/>
             <mass value="${base_mass}" />
@@ -81,13 +81,10 @@
   </link>
 
     <joint name="lidar_joint" type="fixed">
-        <parent link="body_link"/>
+        <parent link="base_link"/>
         <child link="lidar_link"/>
-        <origin xyz=".47 0 ${-0.015 - 0.005/2 -0.001}" rpy="${radians(180)} 0 0"/> <!-- joint location -->
+        <origin xyz=".47 0 ${-0.015 - 0.005/2 -0.001}" rpy="${radians(180)} 0 0"/> <!-- joint location - this may be the plane of the laser-->
     </joint>
-
-<!-- lidar sensor -->
-
 
 <!-- IMU sensor -->
  <link name="imu_link">
@@ -116,7 +113,7 @@
   </link>
 
     <joint name="imu_joint" type="fixed">
-        <parent link="body_link"/>
+        <parent link="base_link"/>
         <child link="imu_link"/>
         <origin xyz="0 0.17 ${+0.015 + 0.005/2 +0.001}" rpy="0 0 0"/> <!-- joint location -->
     </joint>

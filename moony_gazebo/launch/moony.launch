@@ -18,7 +18,8 @@
     <!-- load the controllers -->
 
     <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
-    output="screen" ns="/moony" args="joint_state_controller" />
+    output="screen"  ns="/moony" args="joint_state_controller" />
+    <!-- ns="/moony" -->
     <!-- joint_state_controller front_mobile_base_controller rear_mobile_base_controller -->
 
     <!-- convert joint states to TF transforms for rviz, etc -->

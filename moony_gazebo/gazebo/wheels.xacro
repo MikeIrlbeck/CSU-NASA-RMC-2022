@@ -47,7 +47,7 @@
         </gazebo>
 
     <joint name="wheel_${num}_joint" type="continuous">
-        <parent link="body_link"/>
+        <parent link="base_link"/>
         <child link="wheel_${num}_link"/>
         <origin xyz="${x * 0.3} ${y * wheel_y} ${-0.02 - base_height/2}" rpy="0 0 0"/> <!-- joint location -->
         <limit effort="0.1" velocity="1"/>
