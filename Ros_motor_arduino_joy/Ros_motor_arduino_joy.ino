@@ -2,34 +2,34 @@
 #include <ros.h>
 #include <std_msgs/String.h>
 #include <math.h>
-#include <geometry_msgs/Twist.h>
 #include <Sabertooth.h>
-#include <SabertoothSimplified.h>
-#include <SoftwareSerial.h>
 #include <sensor_msgs/Joy.h>
 
-SoftwareSerial SWSerial(NOT_A_PIN, 6);
-SoftwareSerial SWSerial1(NOT_A_PIN, 5);
-Sabertooth ST(128, SWSerial);
-Sabertooth ST1(128, SWSerial1);
-SoftwareSerial portROS(0, 1);
-int deadband = 15;
+
+Sabertooth ST1(130, Serial2); //Sets ST1 to both wheel motor drivers
+Sabertooth ST2(129, Serial2); //ST2 to belt tilt
+Sabertooth ST3(128, Serial2); //ST3 to plunge
 ros::NodeHandle nh;
 
 void callback(const sensor_msgs::Joy& joy)
-{
-  float joy1 = joy.axes[1];
-  //float move2 = cmd_vel.buttons;
-  float move1 = joy1 * 125;
-    
-  //ST.motor(1, move1);
-  //ST1.motor(1, move1);
-  //ST.motor(2, move2);
-  //ST1.motor(2,move2);
-  ST.drive(move1);
-  ST1.drive(move1);
-  //ST.turn(move2);
-  //ST1.turn(move2);
+{ 
+  int joy0 = joy.axes[0] * 125; //LS LR
+  int joy1 = joy.axes[1] * 125; //LS UD
+  int joy3 = joy.axes[3] * 125; //RS LR
+  int joy4 = joy.axes[4] * 125; //RS UD
+  int joy5 = -127.5 * (joy.axes[5] - 1); //RT
+  int button1 = joy.buttons[1]; //B button
+
+  ST1.drive(joy1);  // Wheels drive
+  ST1.turn(joy0);   // Wheels Turn
+  ST2.drive(joy3);  // Belt Tilt
+  ST3.drive(joy4);  // Plunge
+
+  // If button B is pressed Reverse else forward
+  if (button1==1) digitalWrite(3, HIGH);
+  else digitalWrite(3, LOW);
+  
+  analogWrite(2, joy5); // Trigger turns belt
 }
 
 ros::Subscriber <sensor_msgs::Joy> sub("joy",  callback);
@@ -37,12 +37,21 @@ ros::Subscriber <sensor_msgs::Joy> sub("joy",  callback);
 
 void setup()
 {
-    SWSerial.begin(9600);
-    SWSerial1.begin(9600);
-    portROS.begin(57600);
-  //sets the drive and turn states to 0 so the motors start at 0
-    ST.drive(0);
-    ST.turn(0);
+    Serial1.begin(57600); //Baud for ROS
+    Serial2.begin(9600);  //Baud for Sabertooths
+    
+      //sets the drive and turn states to 0 so the motors start at 0
+    ST1.drive(0);
+    ST1.turn(0);
+    ST2.drive(0);
+    ST2.turn(0);
+    ST3.drive(0);
+    ST3.turn(0);
+
+    
+    pinMode(2, OUTPUT); // PWM for belt speed
+    pinMode(3, OUTPUT); // Digital for belt F/R
+    
     nh.initNode();
     nh.subscribe(sub);
 }
