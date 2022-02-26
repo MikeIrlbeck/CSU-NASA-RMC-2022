@@ -1,0 +1,90 @@
+<launch>
+  <arg name="world_file"  default="$(find moony_gazebo)/worlds/test_pit.world"/>
+  <!-- <arg name="world_file"  default="$(find summit_xl_gazebo)/worlds/test_zone.sdf"/> -->
+
+  <!-- <arg name="base"      value="$(optenv TURTLEBOT_BASE kobuki)"/> create, roomba -->
+  <!-- arg name="battery"   value="$(optenv TURTLEBOT_BATTERY /proc/acpi/battery/BAT0)"/ -->  <!-- /proc/acpi/battery/BAT0 -->
+  <!-- <arg name="stacks"    value="$(optenv TURTLEBOT_STACKS hexagons)"/>  circles, hexagons -->
+  <!-- <arg name="3d_sensor" value="$(optenv TURTLEBOT_3D_SENSOR kinect)"/>  kinect, asus_xtion_pro -->
+
+  <arg name="paused" default="false"/>
+  <arg name="use_sim_time" default="true"/>
+  <arg name="gui" default="true"/>
+  <arg name="headless" default="false"/>
+  <arg name="debug" default="false"/>
+
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(arg world_file)" />
+    <arg name="paused" value="$(arg paused)"/>
+    <arg name="use_sim_time" value="$(arg use_sim_time)"/>
+    <arg name="gui" value="$(arg gui)"/>
+    <arg name="headless" value="$(arg headless)"/>
+    <arg name="debug" value="$(arg debug)"/>
+  </include>
+
+<!-- launch robot XACRO/URDF file -->
+  <include file="$(find moony_navigation_gazebo)/launch/includes/moony.launch.xml" />
+
+<!-- load controllers -->
+  <rosparam file="$(find moony_description)/config/skid_drive.yaml" command="load" />
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+    output="screen"  ns="/moony" args="joint_state_controller" /> 
+
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
+    <param name="publish_frequency" type="double" value="30.0" />
+    <remap from="/joint_states" to="/moony/joint_states" />
+    </node>
+	
+<!-- launch odometry -->
+  <!-- <node pkg="moony_odometry" type="moony_odometry_node" name="odometry_publisher"  output="screen" /> -->
+
+    <node pkg="robot_pose_ekf" type="robot_pose_ekf" name="robot_pose_ekf">
+        <param name="output_frame" value="odom_combined"/>
+        <param name="base_footprint_frame" value="base_footprint"/>
+        <param name="freq" value="30.0"/>
+        <param name="sensor_timeout" value="1.0"/>  
+        <param name="odom_used" value="true"/> <!-- this MUST be true, "odom_used; otherwise a odom_combined frame is not broadcasted" -->
+        <param name="imu_used" value="true"/>
+        <param name="vo_used" value="false"/>
+
+        <remap from="odom" to="moony/skid_drive" />
+        <remap from="imu_data" to="moony/imu" />
+    </node>
+    <!-- <node pkg="robot_pose_ekf" type="robot_pose_ekf" name="robot_pose_ekf">
+        <param name="output_frame" value="odom"/>
+        <param name="base_footprint_frame" value="base_footprint"/>
+        <param name="freq" value="30.0"/>
+        <param name="sensor_timeout" value="1.0"/>
+        <param name="odom_used" value="false"/>
+        <param name="imu_used" value="true"/>
+        <param name="vo_used" value="false"/>
+        <param name="debug" value="false"/>
+        <param name="self_diagnose" value="false"/>
+        <param name="imu_topic" value="/moony/imu"/>
+    </node> -->
+
+    <!-- <node pkg="robot_pose_ekf" type="robot_pose_ekf" name="robot_pose_ekf">
+        <param name="output_frame" value="odom_combined"/>
+        <param name="base_footprint_frame" value="base_footprint"/>
+        <param name="freq" value="30.0"/>
+        <param name="sensor_timeout" value="1.0"/>  
+        <param name="odom_used" value="false"/>
+        <param name="imu_used" value="true"/>
+        <param name="vo_used" value="false"/>
+        <param name="publish_tf" value="true"/>
+        <param name="debug" value="true"/>
+        <remap from="odom" to="odom"/>
+        <remap from="imu_data" to="/moony/imu" />
+    </node> -->
+
+  <!-- Fake laser -->
+  <!-- node pkg="nodelet" type="nodelet" name="laserscan_nodelet_manager" args="manager"/>
+  <node pkg="nodelet" type="nodelet" name="depthimage_to_laserscan"
+        args="load depthimage_to_laserscan/DepthImageToLaserScanNodelet laserscan_nodelet_manager">
+    <param name="scan_height" value="10"/>
+    <param name="output_frame_id" value="/camera_depth_frame"/>
+    <param name="range_min" value="0.45"/>
+    <remap from="image" to="/camera/depth/image_raw"/>
+    <remap from="scan" to="/scan"/>
+  </node -->
+</launch>

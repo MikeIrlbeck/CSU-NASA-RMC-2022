@@ -11,13 +11,13 @@
     <rightRearJoint>wheel_4_joint</rightRearJoint>
     <wheelSeparation>${wheel_y * 2}</wheelSeparation>
     <wheelDiameter>${wheel_collision_radius}</wheelDiameter>
-    <robotBaseFrame>base_link</robotBaseFrame>
+    <robotBaseFrame>base_footprint</robotBaseFrame>
     <!-- should this be base_footprint? -->
     <topicName>/moony/cmd_vel</topicName>
     <commandTopic>/moony/cmd_vel</commandTopic>
     <torque>20</torque>
-    <odometryTopic>notUsed</odometryTopic>
-    <odometryFrame>notUsed</odometryFrame>
+    <odometryTopic>skid_drive</odometryTopic>
+    <odometryFrame>skid_drive</odometryFrame>
     <broadcastTF>false</broadcastTF>
     <covariance_x>0.000100</covariance_x>
     <covariance_y>0.000100</covariance_y>

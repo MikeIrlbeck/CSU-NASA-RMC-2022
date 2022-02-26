@@ -1,6 +1,17 @@
 <?xml version="1.0" ?>
 <sdf version="1.4">
   <world name="default">
+    <gui fullscreen='0'>
+      <plugin name='3D View' filename='GzScene3D'>
+        <camera_pose>0 0 10 0 1.57 1.57</camera_pose>
+      </plugin>
+      <camera name='user_camera'>
+        <pose>0 0 8 -1e-06 1.57 1.57</pose>
+        <view_controller>orbit</view_controller>
+        <projection_type>perspective</projection_type>
+      </camera>
+    </gui>
+
     <include>
       <uri>model://ground_plane</uri>
     </include>
@@ -10,6 +21,8 @@
     <include>
       <uri>model://Block_Competition_Arena</uri>
     </include>
+
+
     <!-- <include>
       <uri>model://gas_station</uri>
       <name>gas_station</name>

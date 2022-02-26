@@ -27,5 +27,7 @@
     respawn="false" output="screen">
     <remap from="/joint_states" to="/moony/joint_states" />
     </node>
-			
+	
+    <node pkg="moony_odometry" type="moony_odometry_node" name="odometry_publisher"  output="screen">
+    </node>
 </launch>

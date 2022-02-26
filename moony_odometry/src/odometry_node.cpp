@@ -13,6 +13,7 @@ size_t cycleTracker = 0;
 size_t publishHz = 100;
 
 void IMUCallBack(const sensor_msgs::Imu &);
+void removeSensorNoise(double &, double &, double);
 
 int main(int argc, char **argv) {
   ros::init(argc, argv, "odometry_publisher");
@@ -35,7 +36,7 @@ int main(int argc, char **argv) {
   last_time = ros::Time::now();
 
   ros::Rate r(publishHz); // Hz
-  
+
   while (n.ok()) {
 
     ros::spinOnce(); // check for incoming messages
@@ -54,7 +55,8 @@ int main(int argc, char **argv) {
     // since all odometry is 6DOF we'll need a quaternion created from yaw
     geometry_msgs::Quaternion odom_quat = tf::createQuaternionMsgFromYaw(th);
 
-    auto child = "base_footprint"; // old C style array? ends with a null character
+    auto child =
+        "base_footprint"; // old C style array? ends with a null character
 
     // first, we'll publish the transform over tf
     geometry_msgs::TransformStamped odom_trans;
@@ -70,9 +72,9 @@ int main(int argc, char **argv) {
     // send the transform
     odom_broadcaster.sendTransform(odom_trans);
 
-    /* 
-    * next, we'll publish the odometry message over ROS
-    */
+    /*
+     * next, we'll publish the odometry message over ROS
+     */
     nav_msgs::Odometry odom;
     odom.header.stamp = current_time;
     odom.header.frame_id = "odom";
@@ -92,8 +94,8 @@ int main(int argc, char **argv) {
     // publish the message
     odom_pub.publish(odom);
     if (++cycleTracker % publishHz == publishHz - 1)
-        ROS_INFO("\nx: %.2f, y: %.2f, theta: %.2f", x, y, th);
-    
+      ROS_INFO("\nx: %.2f, y: %.2f, theta: %.2f", x, y, th);
+
     last_time = current_time;
     r.sleep();
   }
@@ -102,9 +104,25 @@ int main(int argc, char **argv) {
 void IMUCallBack(const sensor_msgs::Imu &msg) {
   // physics equation: a = (v2 - v1) / t
   // thus: v2 = a * t + v1
-  if (cycleTracker % publishHz == publishHz - 1)
-        ROS_INFO("\n\tDATA vx: %.2f, vy: %.2f, vtheta: %.2f", msg.linear_acceleration.x, msg.linear_acceleration.y, msg.angular_velocity.z);
-  vx += msg.linear_acceleration.x * dt;
-  vy += msg.linear_acceleration.y * dt;
-  vth = msg.angular_velocity.z;
+  double ax = msg.linear_acceleration.x;
+  double ay = msg.linear_acceleration.y;
+  double theta = msg.angular_velocity.z;
+  if (cycleTracker % publishHz == publishHz - 1) {
+    ROS_INFO("\n\tSENSOR ax: %.5f, ay: %.5f, vtheta: %.5f",
+             ax, ay, theta);
+    ROS_INFO("\n\tPROG vx: %.5f, vy: %.5f, vtheta: %.5f",
+             vx, vy, vth);
+  }
+  removeSensorNoise(ax, ay, 0.01);
+  removeSensorNoise(vx, vy, 0.01);
+  vx +=  ax * dt;
+  vy += ay * dt;
+  vth = theta;
+}
+
+void removeSensorNoise(double & a, double & b, double threshold) {
+  if(a < threshold)
+    a = 0;
+  if(b < threshold)
+    b = 0;
 }
