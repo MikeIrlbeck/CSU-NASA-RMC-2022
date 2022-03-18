@@ -1,0 +1,12 @@
+<launch>
+
+    <!--- Start AMCL Localization -->
+    <include file="$(find moony_navigation_gazebo)/launch/amcl.launch" />
+    
+    <!-- Start EKF Localization -->
+    <include file="$(find moony_odometry)/launch/moony_localization.launch" />
+    
+    <!-- Start Move Base -->
+    <include file="$(find moony_navigation_gazebo)/launch/move_base.launch" />
+
+</launch> 

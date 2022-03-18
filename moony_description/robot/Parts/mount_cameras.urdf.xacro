@@ -6,14 +6,14 @@
             <collision>
             <origin xyz="0 0 ${.1/2}" rpy="0 0 0"/>
             <geometry>
-                <box size="0.2 0.1 0.1"/>
+                <box size="0.1 0.05 0.05"/>
             </geometry>
             </collision>
 
             <visual>
             <origin xyz="0 0 0" rpy="0 0 0"/>
             <geometry>
-                <box size="0.2 0.1 0.1"/>
+                <box size="0.1 0.05 0.05"/>
             </geometry>
             </visual>
 
@@ -30,7 +30,7 @@
         <joint name="${side}_camera_joint" type="fixed">
             <parent link="base_link"/>
             <child link="${side}_camera_link"/>
-            <origin xyz="${x} ${y} ${+0.015 + 0.005/2 +0.001}" rpy="0 0 0"/> <!-- joint location -->
+            <origin xyz="${x} ${y} ${0.05}" rpy="0 0 0"/> <!-- joint location -->
         </joint>
     </xacro:macro>
 </robot>

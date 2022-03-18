@@ -18,7 +18,7 @@
     <torque>20</torque>
     <odometryTopic>skid_drive</odometryTopic>
     <odometryFrame>skid_drive</odometryFrame>
-    <broadcastTF>false</broadcastTF>
+    <broadcastTF>true</broadcastTF> <!-- made this true for the robot_localization package; ODOM -> BASE LINK -->
     <covariance_x>0.000100</covariance_x>
     <covariance_y>0.000100</covariance_y>
     <covariance_yaw>0.010000</covariance_yaw>

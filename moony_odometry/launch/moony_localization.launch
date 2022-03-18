@@ -1,0 +1,24 @@
+<launch> 
+
+    <!-- Run the EKF Localization nodes -->
+
+    <!-- odom -> base_footprint -->
+<!-- this is currently taken care of in the gazebo plugin skid_drive -->
+
+    <!-- <node pkg="robot_localization" type="ekf_localization_node" name="ekf_localization_odom">
+        <rosparam command="load" file="$(find moony_odometry)/params/ekf_localization_with_amcl.yaml"/>
+        <rosparam command="load" file="$(find moony_odometry)/params/ekf_odom.yaml"/>
+        <remap from="odometry/filtered" to="odometry/filtered_imu" />
+    </node> -->
+    <!-- <node pkg="moony_odometry" type="moony_odometry_node" name="odometry_publisher"  output="screen">
+    </node> -->
+
+
+    <!-- map -> odom -->
+    <node pkg="robot_localization" type="ekf_localization_node" name="ekf_localization_map">
+        <rosparam command="load" file="$(find moony_odometry)/params/ekf_localization_with_amcl.yaml"/>
+        <rosparam command="load" file="$(find moony_odometry)/params/ekf_map.yaml"/>
+        <remap from="odometry/filtered" to="odometry/filtered_map"/>
+    </node>
+
+</launch>

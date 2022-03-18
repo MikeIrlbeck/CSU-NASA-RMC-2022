@@ -54,13 +54,14 @@
 <!-- Attach sensors -->
  <xacro:include filename="$(find moony_description)/robot/Parts/mount_lidar.urdf.xacro" />
  <xacro:include filename="$(find moony_description)/robot/Parts/mount_imu.urdf.xacro" />
- <xacro:include filename="$(find moony_description)/robot/Parts/mount_cameras.urdf.xacro" />
+ <!-- <xacro:include filename="$(find moony_description)/robot/Parts/mount_cameras.urdf.xacro" />
     <xacro:camera side="left" x="0.47" y="0.17" />
-
+    <xacro:camera side="right" x="0.47" y="-0.17" /> -->
+ 
 <!-- Include gazebo simulation parameters -->
 <xacro:include filename="$(find moony_gazebo)/gazebo/skid_drive.xacro" />
 <xacro:include filename="$(find moony_gazebo)/gazebo/sensors.xacro" />
-<xacro:include filename="$(find moony_gazebo)/gazebo/cameras.xacro" />
-    <xacro:camera_gazebo side="left" />
+<!-- <xacro:include filename="$(find moony_gazebo)/gazebo/cameras.xacro" /> -->
+    <!-- <xacro:camera_gazebo side="left" /> -->
 
 </robot>

@@ -14,7 +14,7 @@
         </inertia>
         <pose>0 0 0 0 -0 0</pose>
       </inertial>
-      <pose>0 -1.75 0 -2e-05 -0 0</pose>
+      <pose>-0 -1.75 -0 -2e-05 -0 0</pose>
       <gravity>1</gravity>
       <self_collide>0</self_collide>
       <kinematic>0</kinematic>
@@ -112,7 +112,7 @@
         </inertia>
         <pose>0 0 0 0 -0 0</pose>
       </inertial>
-      <pose>-0 1.75 -0 -3e-05 -0 0</pose>
+      <pose>0 1.75 0 -3e-05 -0 0</pose>
       <gravity>1</gravity>
       <self_collide>0</self_collide>
       <kinematic>0</kinematic>
@@ -210,7 +210,7 @@
         </inertia>
         <pose>0 0 0 0 -0 0</pose>
       </inertial>
-      <pose>3.9 0 0 -1e-05 -0 0</pose>
+      <pose>3.9 0 0 -1e-05 0 0</pose>
       <gravity>1</gravity>
       <self_collide>0</self_collide>
       <kinematic>0</kinematic>

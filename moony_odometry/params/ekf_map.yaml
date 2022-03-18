@@ -1,0 +1,22 @@
+#Configuation for robot odometry EKF
+# MAP -> ODOM
+publish_tf: false
+world_frame: map
+
+odom0: moony/skid_drive
+odom0_config: [false, false, false,
+               false, false, true,
+               true, true, false,
+               false, false, true,
+               false, false, false]
+odom0_differential: false
+
+imu0: moony/imu
+imu0_config: [false, false, false,
+              false, false, true,
+              false, false, false,
+              false, false, true,
+              true, false, false]
+imu0_differential: false
+
+# TODO: add a pose0 input data from the beacan

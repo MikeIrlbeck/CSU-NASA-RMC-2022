@@ -1,0 +1,22 @@
+#Configuation for robot odometry EKF
+# ODOM -> BASE LINK
+
+publish_tf: true
+world_frame: odom
+
+
+odom0: moony/skid_drive
+odom0_config: [false, false, false,
+               false, false, true,
+               true, true, false,
+               false, false, true,
+               false, false, false]
+odom0_differential: false
+
+# imu0: moony/imu
+# imu0_config: [false, false, false,
+#               false, false, true,
+#               false, false, false,
+#               false, false, true,
+#               true, false, false]
+# imu0_differential: false
