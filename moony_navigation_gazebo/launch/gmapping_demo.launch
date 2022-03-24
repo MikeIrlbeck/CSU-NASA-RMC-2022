@@ -1,3 +1,11 @@
 <launch>
   <include file="$(find moony_2dnav_simulation)/launch/includes/gmapping/gmapping.launch.xml"/>
+
+  <!-- Start Move Base -->
+  <include file="$(find moony_navigation_gazebo)/launch/move_base.launch" >
+     <arg name="no_static_map" default="true"/>
+     <arg name="cmd_topic" default="moony/cmd_vel" />
+     <arg name="global_frame" default="skid_drive"/>
+  </include>
+
 </launch>

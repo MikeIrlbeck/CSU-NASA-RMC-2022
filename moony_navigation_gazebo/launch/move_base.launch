@@ -1,10 +1,8 @@
 <?xml version="1.0"?>
 <launch>
-  <!--- Run map server and AMCL -->
-  <include file="$(find moony_navigation_gazebo)/launch/amcl.launch" />
-
-  <arg name="no_static_map" default="false"/>
-  <arg name="cmd_topic" default="moony/cmd_vel" />
+  <arg name="no_static_map"/>
+  <arg name="cmd_topic"/>
+  <arg name="global_frame"/>
 
   <arg name="base_global_planner" default="navfn/NavfnROS"/>
   <arg name="base_local_planner" default="dwa_local_planner/DWAPlannerROS"/>
@@ -24,14 +22,16 @@
     <rosparam file="$(find moony_navigation_gazebo)/params/costmap_local.yaml" command="load" ns="local_costmap" />
     <param name="local_costmap/width" value="10.0"/>
     <param name="local_costmap/height" value="10.0"/>
+    <param name="local_costmap/global_frame" value="$(arg global_frame)" />
     
     <!-- static global costmap, static map provides size -->
     <rosparam file="$(find moony_navigation_gazebo)/params/costmap_global_static.yaml" command="load" ns="global_costmap" unless="$(arg no_static_map)"/>
 
     <!-- global costmap with laser, for odom_navigation_demo -->
     <rosparam file="$(find moony_navigation_gazebo)/params/costmap_global_laser.yaml" command="load" ns="global_costmap" if="$(arg no_static_map)"/>
-    <param name="global_costmap/width" value="100.0" if="$(arg no_static_map)"/>
-    <param name="global_costmap/height" value="100.0" if="$(arg no_static_map)"/>
+    <param name="global_costmap/width" value="15.0" if="$(arg no_static_map)"/>
+    <param name="global_costmap/height" value="15.0" if="$(arg no_static_map)"/>
+    <param name="global_costmap/global_frame" value="$(arg global_frame)" if="$(arg no_static_map)"/>
 
     <remap from="cmd_vel" to="$(arg cmd_topic)"/>
   </node>

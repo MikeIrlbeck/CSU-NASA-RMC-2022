@@ -3,6 +3,7 @@
   <!-- <arg name="odom_frame" default="skid_drive" /> base_footprint -> this is the child frame of odometry/filtered_map -->
   <arg name="odom_topic" default="odometry/filtered_map" />
   <arg name="scan_topic" default="moony/laser/scan" />
+  <!-- <arg name="map_file" default="$(find moony_2dnav_simulation)/maps/mapObstacle1.yaml"/> -->
   <arg name="map_file" default="$(find moony_2dnav_simulation)/maps/firstMap.yaml"/>
   <!-- <arg name="map_file" default="$(find moony_2dnav_simulation)/maps/gas_station.yaml"/> -->
 

@@ -1,6 +1,9 @@
 global_frame: map
 rolling_window: false # false: we will initialize the costmap by getting the data from a static map. This is the way you want to initialize a global costmap.
 
+cost_scaling_factor: 1
+inflation_radius: 0.6
+
 plugins:
   - {name: static,                  type: "costmap_2d::StaticLayer"} # Used to initialize the costmap from a static map.
   - {name: inflation,               type: "costmap_2d::InflationLayer"} # Used to initialize the costmap from a static map.

@@ -1,5 +1,8 @@
-global_frame: skid_drive #odom_combined
+# global_frame: skid_drive #odom_combined
 rolling_window: true
+
+cost_scaling_factor: 1
+inflation_radius: 0.6
 
 plugins:
   - {name: obstacles_laser,           type: "costmap_2d::ObstacleLayer"}

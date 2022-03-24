@@ -18,4 +18,4 @@ obstacles_laser:
     laser: {data_type: LaserScan, clearing: true, marking: true, topic: moony/laser/scan, inf_is_valid: true, obstacle_range: 5.5}
 
 inflation:
-    inflation_radius: 1.0
+    inflation_radius: 0.50 # the radius to which obstacle cost values are inflated in the map

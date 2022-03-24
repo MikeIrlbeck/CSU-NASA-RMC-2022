@@ -31,6 +31,8 @@
     </node>
 	
 <!-- launch odometry -->
+<include file="$(find moony_odometry)/launch/moony_localization.launch" />
+
   <!-- <node pkg="moony_odometry" type="moony_odometry_node" name="odometry_publisher"  output="screen" /> -->
 
     <!-- <node pkg="robot_pose_ekf" type="robot_pose_ekf" name="robot_pose_ekf">

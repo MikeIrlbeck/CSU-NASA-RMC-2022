@@ -5,17 +5,17 @@
 
   
   <param name="robot_description" command="$(find xacro)/xacro '$(find moony_description)/robot/robot_skid.urdf.xacro'" />
-        <arg name="x" value="0.0" />
+        <arg name="x" value="-2.0" />
         <arg name="y" value="0.0" />
         <arg name="z" value=".5" />
         <arg name="robot_name" value="moony" />
 
   <!-- Gazebo model spawner -->
-  <node name="spawn_turtlebot_model" pkg="gazebo_ros" type="spawn_model"
+  <node name="spawn_moony_model" pkg="gazebo_ros" type="spawn_model"
         args="-x $(arg x) -y $(arg y) -z $(arg z)  -model $(arg robot_name) -unpause -urdf -param robot_description"/>
 
   <!-- Velocity muxer: might be unnecessary - multiple controllers? -->
-  <node pkg="nodelet" type="nodelet" name="mobile_base_nodelet_manager" args="manager"/>
+  <!-- <node pkg="nodelet" type="nodelet" name="mobile_base_nodelet_manager" args="manager"/> -->
   <!-- <node pkg="nodelet" type="nodelet" name="cmd_vel_mux"
         args="load yocs_cmd_vel_mux/CmdVelMuxNodelet mobile_base_nodelet_manager">
     <param name="yaml_cfg_file" value="$(find turtlebot_bringup)/param/mux.yaml" />

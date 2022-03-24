@@ -1,4 +1,4 @@
-global_frame: odom_combined
+# global_frame: skid_drive #odom_combined
 rolling_window: true
 track_unknown_space: true
 
