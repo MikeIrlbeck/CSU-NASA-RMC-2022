@@ -6,7 +6,7 @@
         <camera_pose>0 4 4 0 0.5 0.57</camera_pose>
       </plugin>
       <camera name='user_camera'>
-        <pose>22 -9 12 0 0.4 2.8</pose>
+        <pose>-12 -14 4 0 0.2 0.8</pose>
         <view_controller>orbit</view_controller>
         <projection_type>perspective</projection_type>
       </camera>
