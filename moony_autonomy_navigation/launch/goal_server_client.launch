@@ -1,0 +1,8 @@
+<launch>
+    <node pkg="moony_autonomy_navigation" type="goal_server_node" name="goal_server_node"  output="screen">
+    </node>
+
+    <node pkg="moony_autonomy_navigation" type="goal_client_node" name="goal_client_node"  output="screen">
+    </node>
+
+</launch>

@@ -1,0 +1,5 @@
+<launch>
+    <node pkg="moony_autonomy_navigation" type="simple_navigation_goals" name="simple_navigation_goals_node"  output="screen">
+    </node>
+
+</launch>
