@@ -1,5 +1,6 @@
 <launch>
-  <include file="$(find moony_2dnav_simulation)/launch/includes/gmapping/gmapping.launch.xml"/>
+<!--  <include file="$(find moony_2dnav_simulation)/launch/includes/gmapping/gmapping.launch.xml"/> -->
+  <include file="$(find moony_mapping)/launch/gmapping.launch.xml"/>
 
   <!-- Start Move Base -->
   <include file="$(find moony_navigation_gazebo)/launch/move_base.launch" >

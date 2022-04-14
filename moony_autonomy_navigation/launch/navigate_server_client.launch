@@ -1,8 +1,0 @@
-<launch>
-    <node pkg="moony_autonomy_navigation" type="navigate_server_node" name="navigate_server_node"  output="screen">
-    </node>
-
-    <node pkg="moony_autonomy_navigation" type="navigate_node" name="navigate_node"  output="screen">
-    </node>
-
-</launch>
