@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>moony_autonomy_navigate</name>
+  <name>moony_autonomy_dump</name>
   <version>0.0.0</version>
-  <description>The moony_autonomy_navigate package</description>
+  <description>The moony_autonomy_dump package</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <!-- Example:  -->
@@ -19,7 +19,7 @@
   <!-- Url tags are optional, but multiple are allowed, one per tag -->
   <!-- Optional attribute type can be: website, bugtracker, or repository -->
   <!-- Example: -->
-  <!-- <url type="website">http://wiki.ros.org/moony_autonomy_navigate</url> -->
+  <!-- <url type="website">http://wiki.ros.org/moony_autonomy_dump</url> -->
 
 
   <!-- Author tags are optional, multiple are allowed, one per tag -->
