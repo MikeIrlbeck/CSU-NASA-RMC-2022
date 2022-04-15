@@ -14,3 +14,7 @@ http://wiki.ros.org/slam_gmapping/Tutorials/MappingFromLoggedData
 - rosbag play --clock basic_localization_stage.bag
 4. Optional, Terminal four: visualize the data (you can add laser scan data and map data)
 - rosrun rviz rviz
+
+How to pull in submodule code (i.e. rplidar_ros)
+    git submodule init
+    git submodule update
