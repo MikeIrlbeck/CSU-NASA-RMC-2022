@@ -6,7 +6,7 @@ from std_msgs.msg import String
 
 # Example of importing action messages
 # from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal, MoveBaseResult, MoveBaseFeedback
-from moony_autonomy_dump.msg import DumpAction, DumpGoal, DumpResult, DumpFeedback
+from moony_autonomy_mine.msg import MineAction, MineGoal, MineResult, MineFeedback
 
 # Example of importing service messges
 # for make a plan service
@@ -20,16 +20,16 @@ from moony_autonomy_dump.msg import DumpAction, DumpGoal, DumpResult, DumpFeedba
 # import geometry_msgs.msg # imports 'all' messsages in this; need to access them via geometry_msgs.msg.Path
 
 
-class DumpingAction(object):
+class MiningAction(object):
     def __init__(self, name):
         self.startUp()
         self._action_name = name
         self._actionServer = actionlib.SimpleActionServer(
-            self._action_name, DumpAction, execute_cb=self.execute_cb, auto_start=False)
+            self._action_name, MineAction, execute_cb=self.execute_cb, auto_start=False)
         self._actionServer.start()
 
     def startUp(self):
-        self._result = DumpResult()
+        self._result = MineResult()
         print("Server ACTIVE")
 
     # Example of sending a goal to another action server
@@ -61,7 +61,7 @@ class DumpingAction(object):
     # def subscribe_and_do_something(self, goalList):
 
     def goal1(self, distance):
-        fb = DumpFeedback("doing goal 1: %d" % distance)
+        fb = MineFeedback("doing goal 1: %d" % distance)
         self._actionServer.publish_feedback(fb)
 
             # Example of a simple publisher
@@ -74,29 +74,29 @@ class DumpingAction(object):
             rate.sleep()
             i += 1
         if 1 == 1:
-            self._result = DumpResult(True)
+            self._result = MineResult(True)
 
     def goal2(self):
              # subscribe to only one message
         self.noise = rospy.wait_for_message("goal2Topic", String, timeout=None)
         print(self.noise)
 
-        self._result = DumpResult(True)
+        self._result = MineResult(True)
 
     def execute_cb(self, goal):
-        self._result = DumpResult(False)  # only give a successful result if everything went well
+        self._result = MineResult(False)  # only give a successful result if everything went well
 
         print(goal)
         # if self._actionServer.is_preempt_requested(): # allows the client to cancel the goal
         #     rospy.loginfo('%s: Preempted' % self._action_name)
         #     self._actionServer.set_preempted()
-        #     # self._result = DumpResult(False)
+        #     # self._result = MineResult(False)
         # else:
         
         if(str(goal).find("startup") != -1):
             # if(goal == "startup"):
             print("startup time")
-            self._result = DumpResult(True)
+            self._result = MineResult(True)
         elif(str(goal).find("goal1") != -1):
             self.goal1(23)
         elif(str(goal).find("goal2") != -1):
@@ -106,7 +106,7 @@ class DumpingAction(object):
 
 
 if __name__ == '__main__':
-    rospy.init_node('dump')
+    rospy.init_node('mine')
     print(rospy.get_name())
-    server = DumpingAction(rospy.get_name())
+    server = MiningAction(rospy.get_name())
     rospy.spin()
