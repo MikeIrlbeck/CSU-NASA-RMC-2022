@@ -6,33 +6,29 @@
   <param name="robot_description" command="$(find xacro)/xacro '$(find moony_description)/robot/robot_skid.urdf.xacro'" />
     <arg name="x" value="0.0" />
     <arg name="y" value="0.0" />
-    <arg name="z" value=".5" />
+    <arg name="z" value=".25" />
     <arg name="robot_name" value="moony" />
     
    <!-- <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" /> -->
-   <node pkg="robot_state_publisher" type="robot_state_publisher" >
+   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" >
       <!-- <remap from="robot_description" to="robot_description" /> -->
       <!-- <remap from="joint_states" to="different_joint_states" /> -->
    </node>
   <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" args="_use_gui:=True" />
   <node pkg="rviz" type="rviz" name="$(anon rviz)" args="-d $(find moony_description)/rviz_config/viewing_gazebo_lidar.rviz" respawn="false" output="screen" />
-  <!-- args="-d $(find chefbot_description)/rviz/navigation.rviz" /> -->
-
+  
   <!-- <include file="$(find moony_mapping)/launch/gmapping.launch.xml"/> -->
 
-
-  <!-- <include file="$(find rplidar_ros)/launch/rplidar_s1.launch" /> -->
-  <!-- <include file="$(find wit-imu-driver)/launch/WT901C.launch" > -->
-     <!-- <arg name="port" default="ttyUSB1"/> -->
-
-  <!-- <include file="$(find moony_mapping)/launch/gmapping.launch.xml"/>
-
-  <include file="$(find rplidar_ros)/launch/rplidar_s1.launch" >
-     <arg name="serial_port" default="/dev/ttyUSB0"/>
-     <arg name="frame_id" default="/dev/ttyUSB0"/>
-
+  <include file="$(find moony_bringup)/launch/start_lidar.launch" >
+  <!-- <param name="serial_port"         type="string" value="/dev/ttyUSB1"/>  
+  <param name="frame_id"            type="string" value="laser_link"/>
+  <param name="inverted"            type="bool"   value="true"/> -->
+    <arg name="serial_port" value="/dev/ttyUSB1"/>
+    <arg name="frame_id" value="lidar_link"/>
+    <arg name="inverted" value="true"/>
   </include>
 
+<!-- 
   <include file="$(find wit-imu-driver)/launch/WT901C.launch" >
      <arg name="port" default="ttyUSB1"/> -->
 
