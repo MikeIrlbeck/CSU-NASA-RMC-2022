@@ -4,15 +4,15 @@ import rospy
 # Brings in the SimpleActionClient
 import actionlib
 
-from moony_autonomy_dump.msg import DumpAction, DumpGoal, DumpResult, DumpFeedback
+from moony_autonomy_mine.msg import MineAction, MineGoal, MineResult, MineFeedback
 
 # global client
 
 def feedbackCb(feedback):
     print(feedback)
 
-def dumping_client(requestedGoal):
-    goal = DumpGoal(requestedGoal)
+def Mining_client(requestedGoal):
+    goal = MineGoal(requestedGoal)
     client.send_goal(goal, None, feedback_cb=feedbackCb)
 
     # Other client functionality
@@ -20,16 +20,16 @@ def dumping_client(requestedGoal):
     # print(client.get_state())
     
     client.wait_for_result()
-    return client.get_result()  # A DumpResult
+    return client.get_result()  # A MineResult
 if __name__ == '__main__':
-    rospy.init_node('dump_client_py')
+    rospy.init_node('mine_client_py')
     try:
-        client = actionlib.SimpleActionClient('dump', DumpAction)
+        client = actionlib.SimpleActionClient('mine', MineAction)
         client.wait_for_server()
 
-        print(dumping_client("startup"))
-        print(dumping_client("goal1"))
-        print(dumping_client("goal2"))
+        print(Mining_client("startup"))
+        print(Mining_client("goal1"))
+        print(Mining_client("goal2"))
 
     except rospy.ROSInterruptException:
         print("program interrupted before completion") 
