@@ -1,26 +1,30 @@
 <launch>
-<!--  <include file="$(find moony_2dnav_simulation)/launch/includes/gmapping/gmapping.launch.xml"/> -->
+
    <!-- Load the urdf into the parameter server. -->
+  <!--  <param name="robot_description" command="$(find xacro)/xacro - -inorder '$(find chefbot_description)/urdf/chefbot.xacro'" /> -->
+   
   <param name="robot_description" command="$(find xacro)/xacro '$(find moony_description)/robot/robot_skid.urdf.xacro'" />
     <arg name="x" value="0.0" />
     <arg name="y" value="0.0" />
     <arg name="z" value=".5" />
     <arg name="robot_name" value="moony" />
     
+   <!-- <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" /> -->
    <node pkg="robot_state_publisher" type="robot_state_publisher" name="rob_st_pub" >
       <remap from="robot_description" to="robot_description" />
       <remap from="joint_states" to="different_joint_states" />
    </node>
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" args="_use_gui:=True" />
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find chefbot_description)/rviz/navigation.rviz" />
 
+  <!-- <include file="$(find moony_mapping)/launch/gmapping.launch.xml"/> -->
 
-  <include file="$(find moony_mapping)/launch/gmapping.launch.xml"/>
-
-  <include file="$(find rplidar_ros)/launch/rplidar_s1.launch" />
-  <include file="$(find wit-imu-driver)/launch/WT901C.launch" >
-     <arg name="port" default="ttyUSB1"/>
+  <!-- <include file="$(find rplidar_ros)/launch/rplidar_s1.launch" /> -->
+  <!-- <include file="$(find wit-imu-driver)/launch/WT901C.launch" > -->
+     <!-- <arg name="port" default="ttyUSB1"/> -->
     <!-- TODO: edit the frame that the imu is attached to -->
-  </include>
+  <!-- </include> -->
 
-  <include file="$(find moony_odometry)/launch/moony_localization.launch" />
+  <!-- <include file="$(find moony_odometry)/launch/moony_localization.launch" /> -->
   <!-- TODO: add beacon -->
 </launch>
