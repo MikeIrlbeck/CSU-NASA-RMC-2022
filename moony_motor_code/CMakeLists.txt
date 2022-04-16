@@ -15,7 +15,6 @@ find_package(catkin REQUIRED COMPONENTS
   rosserial_client
   rosserial_msgs
   rosserial_python
-  serial
   std_msgs
 )
 

@@ -8,11 +8,12 @@ project(moony_startup)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  moony_motor_code
+
   roscpp
   rospy
-  rplidar_ros
-  wit-imu-driver
+  # rplidar_ros
+  # wit-imu-driver
+  # moony_motor_code
 )
 
 ## System dependencies are found with CMake's conventions

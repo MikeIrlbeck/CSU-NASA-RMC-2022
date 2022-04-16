@@ -49,21 +49,21 @@
   <!-- Use doc_depend for packages you need only for building documentation: -->
   <!--   <doc_depend>doxygen</doc_depend> -->
   <buildtool_depend>catkin</buildtool_depend>
-  <build_depend>moony_motor_code</build_depend>
+  <!-- <build_depend>moony_motor_code</build_depend> -->
   <build_depend>roscpp</build_depend>
   <build_depend>rospy</build_depend>
-  <build_depend>rplidar_ros</build_depend>
-  <build_depend>wit-imu-driver</build_depend>
-  <build_export_depend>moony_motor_code</build_export_depend>
+  <!-- <build_depend>rplidar_ros</build_depend> -->
+  <!-- <build_depend>wit-imu-driver</build_depend> -->
+  <!-- <build_export_depend>moony_motor_code</build_export_depend> -->
   <build_export_depend>roscpp</build_export_depend>
   <build_export_depend>rospy</build_export_depend>
-  <build_export_depend>rplidar_ros</build_export_depend>
-  <build_export_depend>wit-imu-driver</build_export_depend>
-  <exec_depend>moony_motor_code</exec_depend>
+  <!-- <build_export_depend>rplidar_ros</build_export_depend> -->
+  <!-- <build_export_depend>wit-imu-driver</build_export_depend> -->
+  <!-- <exec_depend>moony_motor_code</exec_depend> -->
   <exec_depend>roscpp</exec_depend>
   <exec_depend>rospy</exec_depend>
-  <exec_depend>rplidar_ros</exec_depend>
-  <exec_depend>wit-imu-driver</exec_depend>
+  <!-- <exec_depend>rplidar_ros</exec_depend> -->
+  <!-- <exec_depend>wit-imu-driver</exec_depend> -->
 
 
   <!-- The export tag contains other, unspecified, tags -->
