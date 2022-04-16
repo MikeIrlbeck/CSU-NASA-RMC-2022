@@ -15,7 +15,12 @@
 
   <include file="$(find moony_mapping)/launch/gmapping.launch.xml"/>
 
-  <include file="$(find rplidar_ros)/launch/rplidar_s1.launch" />
+  <include file="$(find rplidar_ros)/launch/rplidar_s1.launch" >
+     <arg name="serial_port" default="/dev/ttyUSB0"/>
+     <arg name="frame_id" default="/dev/ttyUSB0"/>
+
+  </include>
+
   <include file="$(find wit-imu-driver)/launch/WT901C.launch" >
      <arg name="port" default="ttyUSB1"/>
     <!-- TODO: edit the frame that the imu is attached to -->
