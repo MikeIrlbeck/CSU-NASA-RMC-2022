@@ -1,0 +1,13 @@
+<launch>
+<!--  <include file="$(find moony_2dnav_simulation)/launch/includes/gmapping/gmapping.launch.xml"/> -->
+  <include file="$(find moony_mapping)/launch/gmapping.launch.xml"/>
+
+  <include file="$(find rplidar_ros)/launch/rplidar_s1.launch" />
+  <include file="$(find wit-imu-driver)/launch/WT901C.launch" >
+     <arg name="port" default="ttyUSB1"/>
+    <!-- TODO: edit the frame that the imu is attached to -->
+  </include>
+
+  <include file="$(find moony_odometry)/launch/moony_localization.launch" />
+  <!-- TODO: add beacon -->
+</launch>
