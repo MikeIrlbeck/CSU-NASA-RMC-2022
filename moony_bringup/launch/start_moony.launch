@@ -1,39 +1,36 @@
 <launch>
+  <arg name="scan_topic"  value="moony/laser/scan" />
 
-   <!-- Load the urdf into the parameter server. -->
-  <!--  <param name="robot_description" command="$(find xacro)/xacro - -inorder '$(find chefbot_description)/urdf/chefbot.xacro'" /> -->
-   
-  <param name="robot_description" command="$(find xacro)/xacro '$(find moony_description)/robot/robot_skid.urdf.xacro'" />
-    <arg name="x" value="0.0" />
-    <arg name="y" value="0.0" />
-    <arg name="z" value=".25" />
-    <arg name="robot_name" value="moony" />
+   <!-- Load the urdf into the parameter server. -->   
+  <param name="robot_description" command="$(find xacro)/xacro '$(find moony_description)/robot/real_robot.urdf.xacro'" />
     
-   <!-- <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" /> -->
-   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" >
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" >
       <!-- <remap from="robot_description" to="robot_description" /> -->
       <!-- <remap from="joint_states" to="different_joint_states" /> -->
-   </node>
+  </node>
   <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" args="_use_gui:=True" />
-  <node pkg="rviz" type="rviz" name="$(anon rviz)" args="-d $(find moony_description)/rviz_config/viewing_gazebo_lidar.rviz" respawn="false" output="screen" />
+  <node pkg="rviz" type="rviz" name="$(anon rviz)" args="-d $(find moony_bringup)/rviz_config/lidarImu.rviz" respawn="false" output="screen" />
   
-  <!-- <include file="$(find moony_mapping)/launch/gmapping.launch.xml"/> -->
-
   <include file="$(find moony_bringup)/launch/start_lidar.launch" >
-  <!-- <param name="serial_port"         type="string" value="/dev/ttyUSB1"/>  
-  <param name="frame_id"            type="string" value="laser_link"/>
-  <param name="inverted"            type="bool"   value="true"/> -->
     <arg name="serial_port" value="/dev/ttyUSB1"/>
     <arg name="frame_id" value="lidar_link"/>
     <arg name="inverted" value="true"/>
+    <arg name="scan_topic" value="$(arg scan_topic)"/>
   </include>
 
-<!-- 
-  <include file="$(find wit-imu-driver)/launch/WT901C.launch" >
-     <arg name="port" default="ttyUSB1"/> -->
 
-    <!-- TODO: edit the frame that the imu is attached to -->
-  <!-- </include> -->
+  <!-- <include file="$(find wit-imu-driver)/launch/WT901C.launch" >
+      <arg name="serial_port" value="ttyUSB1"/>
+      <arg name="frame_id" value="imu_link"/>
+      <arg name="imu_topic" value="moony/imu"/>
+      <arg name="publish_mag" value="false"/>
+  </include> -->
+
+  <include file="$(find moony_mapping)/launch/gmapping.launch.xml" >
+      <arg name="scan_topic"  value="$(arg scan_topic)" />
+      <arg name="base_frame"  value="base_footprint"/>
+      <arg name="odom_frame"  value="skid_drive" />
+  </include>
 
   <!-- <include file="$(find moony_odometry)/launch/moony_localization.launch" /> -->
   <!-- TODO: add beacon -->

@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="moony">
+
+<!-- y = width/2 of frame + wheel COG to wall + buffer -->
+<!-- for XACRO math - SPACES matter -->
+
+<xacro:property name="wheel_y" value="${(.38/2)+.04+.01}" /> 
+<xacro:property name="wheel_collision_radius" value="0.17" /> <!-- also used in skid_drive.xacro-->
+
+<xacro:property name="wheel_mesh" value="package://moony_description/models/meshes/wheel_left.dae" />
+
+
+<xacro:macro name="individual_wheel" params="num x y r">
+   <link name="wheel_${num}_link">
+        <inertial>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <mass value="2" />
+            <inertia ixx="0.02" ixy="0" ixz="0" iyy="0.02" iyz="0" izz="0.04"/>
+             <!-- values taken from solidworks; the origin is the position of the part
+                w.r.t its axes for the second moment of mass values  -->
+        </inertial>
+
+        <collision>
+            <origin rpy="${radians(90)} 0 0" xyz="0 0 0"/> <!-- pre joint orientation -->
+            <geometry>
+                <cylinder radius="${wheel_collision_radius}" length="0.09"/>
+            </geometry>
+        </collision>
+
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/> <!-- center of the wheel -->
+            <geometry>
+                <mesh filename="${wheel_mesh}"/>
+            </geometry>
+            <!-- <material name="white"/> only used in rviz for simple geometry -->
+        </visual>
+    </link>
+
+    <joint name="wheel_${num}_joint" type="continuous">
+        <parent link="base_link"/>
+        <child link="wheel_${num}_link"/>
+        <origin xyz="${x * 0.3} ${y * wheel_y} ${-0.02 - base_height/2}" rpy="0 0 0"/> <!-- joint location -->
+        <limit effort="0.1" velocity="1"/>
+        <axis xyz="0 1 0"/>
+    </joint>
+
+    <transmission name="wheel_tran_${num}">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="wheel_${num}_joint">
+            <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="wheel_motor_${num}">
+            <hardwareInterface>VelocityJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+        <!-- previous interface: VelocityJointInterface , EffortJointInterface-->
+    </transmission>
+</xacro:macro>
+
+</robot>

@@ -1,13 +1,16 @@
 <launch>
-
-  <!-- Gmapping -->
-	<arg name="custom_gmapping_launch_file" default="$(find moony_mapping)/launch/gmapping_params.launch.xml"/>
-  <include file="$(arg custom_gmapping_launch_file)">
     <arg name="scan_topic"  default="/moony/laser/scan" />
     <arg name="base_frame"  default="base_footprint"/>
     <!-- <arg name="odom_frame"  default="/moony/skid_drive"/> -->
     <!-- <arg name="odom_frame"  default="/robot_pose_ekf/odom" /> -->
     <arg name="odom_frame"  default="skid_drive" />
+
+  <!-- Gmapping -->
+	<arg name="custom_gmapping_launch_file" default="$(find moony_mapping)/launch/gmapping_params.launch.xml"/>
+  <include file="$(arg custom_gmapping_launch_file)">
+    <arg name="scan_topic"  value="$(arg scan_topic)" />
+    <arg name="base_frame"  value="$(arg base_frame)"/>
+    <arg name="odom_frame"  value="$(arg odom_frame)" />
   </include>
 
 </launch>
