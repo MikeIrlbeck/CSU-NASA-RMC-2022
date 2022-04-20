@@ -19,19 +19,22 @@
   </include>
 
 
-  <!-- <include file="$(find wit-imu-driver)/launch/WT901C.launch" >
-      <arg name="serial_port" value="ttyUSB1"/>
+  <include file="$(find wit-imu-driver)/launch/WT901C.launch" >
+      <arg name="serial_port" value="ttyUSB2"/>
       <arg name="frame_id" value="imu_link"/>
       <arg name="imu_topic" value="moony/imu"/>
       <arg name="publish_mag" value="false"/>
-  </include> -->
+  </include>
+
+  <!-- <include file="$(find moony_odometry)/launch/moony_localization.launch">
+    <arg name="sensors" value="ekf_real_robot.yaml" />
+  </include>
 
   <include file="$(find moony_mapping)/launch/gmapping.launch.xml" >
       <arg name="scan_topic"  value="$(arg scan_topic)" />
       <arg name="base_frame"  value="base_footprint"/>
       <arg name="odom_frame"  value="skid_drive" />
-  </include>
+  </include> -->
 
-  <!-- <include file="$(find moony_odometry)/launch/moony_localization.launch" /> -->
   <!-- TODO: add beacon -->
 </launch>

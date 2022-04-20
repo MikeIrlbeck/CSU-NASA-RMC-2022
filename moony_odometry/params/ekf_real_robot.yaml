@@ -4,18 +4,18 @@ publish_tf: true
 world_frame: skid_drive
 
 imu0: moony/imu
-imu0_config: [false, false, false,
-              false, false, true,
-              false, false, false,
-              false, false, true,
-              true, false, false]
+imu0_config: [false, false, false, # linear pos
+              true, true, true,   # angular pos
+              false, false, false, # linear vel
+              true, true, true,   # angular vel
+              true, true, false]  # linear acc
 imu0_differential: false
 
 # TODO: add a pose0 input data from the beacan
 pose0: moony/skid_drive
-pose0_config: [false, false, false, # ALTER THESE
-               false, false, true,
-               true, true, false,
-               false, false, true,
+pose0_config: [true, true, true, # linear pos
+               false, false, false,
+               false, false, false,
+               false, false, false,
                false, false, false]
 pose0_differential: false

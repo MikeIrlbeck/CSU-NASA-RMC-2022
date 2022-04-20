@@ -18,8 +18,10 @@
     <param name="ymax" value="5.0"/>
     <param name="delta" value="0.05"/>
     <!-- other parameters -->
-    <param name="linearUpdate" value="0.25"/>
-    <param name="angularUpdate" value="0.19635"/>
+    <!-- <param name="linearUpdate" value="0.25"/>
+    <param name="angularUpdate" value="0.19635"/> -->
+    <param name="linearUpdate" value="0.0"/>
+    <param name="angularUpdate" value="0.0"/>
     <param name="temporalUpdate" value="-1.0"/>
     <param name="particles" value="80"/> 
 
