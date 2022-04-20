@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="moony">
+<!-- note: units are meters, kilograms, and radians -->
+
+<!-- THIS PLUGIN NEEDS TO BE FIRST -->
+<!-- <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+        <robotNamespace>/moony</robotNamespace>
+    </plugin>
+</gazebo> -->
+
+<!-- CONSTANTS -->
+<xacro:property name="base_mass" value="4.11" />
+<xacro:property name="base_height" value=".03" />
+
+<!-- LINKS -->
+    <link name="base_footprint" /> <!-- dummy prevents laser from publishing -->
+
+    <joint name="base_joint" type="fixed">
+     <origin xyz="0 0 0.01" rpy="0 0 0" />
+     <parent link="base_footprint"/>
+     <child link="base_link"/>
+   </joint>
+        
+    <link name="base_link">
+        <inertial>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <mass value="${base_mass}" />
+            <inertia ixx="0.1" ixy="0" ixz="0" iyy="0.62" iyz="0" izz="0.52"/>
+             <!-- values taken from solidworks  -->
+        </inertial>
+        <collision>
+            <origin rpy="0 0 0" xyz="0 0 0"/> <!-- center of the wheel -->
+            <geometry>
+                <box size="1 .38 ${base_height}"/> -->
+            </geometry>
+        </collision>
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+                <!-- <box size="1 .38 .03"/> -->
+                <mesh filename="package://moony_description/models/meshes/frame.dae"/>
+            </geometry>
+        </visual>
+    </link>
+
+<!-- Attach wheels -->
+<xacro:include filename="$(find moony_description)/robot/Parts/wheels.xacro" />
+    <xacro:individual_wheel num="1" x="1.0" y="1.0" r="-1.0"/>
+    <xacro:individual_wheel num="2" x="-1.0" y="1.0" r="-1.0"/>
+    <xacro:individual_wheel num="3" x="1.0" y="-1.0" r="1.0"/>
+    <xacro:individual_wheel num="4" x="-1.0" y="-1.0" r="1.0"/>
+
+<!-- Attach sensors -->
+ <xacro:include filename="$(find moony_description)/robot/Parts/real_lidar.urdf.xacro" />
+ <xacro:include filename="$(find moony_description)/robot/Parts/real_imu.urdf.xacro" />
+ <!-- <xacro:include filename="$(find moony_description)/robot/Parts/mount_cameras.urdf.xacro" />
+    <xacro:camera side="left" x="0.47" y="0.17" />
+    <xacro:camera side="right" x="0.47" y="-0.17" /> -->
+ 
+<!-- Include gazebo simulation parameters -->
+<!-- <xacro:include filename="$(find moony_gazebo)/gazebo/skid_drive.xacro" /> -->
+<!-- <xacro:include filename="$(find moony_gazebo)/gazebo/sensors.xacro" /> -->
+<!-- <xacro:include filename="$(find moony_gazebo)/gazebo/cameras.xacro" /> -->
+    <!-- <xacro:camera_gazebo side="left" /> -->
+
+</robot>

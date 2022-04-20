@@ -1,31 +1,37 @@
 <launch>
-<!--  <include file="$(find moony_2dnav_simulation)/launch/includes/gmapping/gmapping.launch.xml"/> -->
-   <!-- Load the urdf into the parameter server. -->
-  <param name="robot_description" command="$(find xacro)/xacro '$(find moony_description)/robot/robot_skid.urdf.xacro'" />
-    <arg name="x" value="0.0" />
-    <arg name="y" value="0.0" />
-    <arg name="z" value=".5" />
-    <arg name="robot_name" value="moony" />
+  <arg name="scan_topic"  value="moony/laser/scan" />
+
+   <!-- Load the urdf into the parameter server. -->   
+  <param name="robot_description" command="$(find xacro)/xacro '$(find moony_description)/robot/real_robot.urdf.xacro'" />
     
-   <node pkg="robot_state_publisher" type="robot_state_publisher" name="rob_st_pub" >
-      <remap from="robot_description" to="robot_description" />
-      <remap from="joint_states" to="different_joint_states" />
-   </node>
-
-
-  <include file="$(find moony_mapping)/launch/gmapping.launch.xml"/>
-
-  <include file="$(find rplidar_ros)/launch/rplidar_s1.launch" >
-     <arg name="serial_port" default="/dev/ttyUSB0"/>
-     <arg name="frame_id" default="/dev/ttyUSB0"/>
-
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" >
+      <!-- <remap from="robot_description" to="robot_description" /> -->
+      <!-- <remap from="joint_states" to="different_joint_states" /> -->
+  </node>
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" args="_use_gui:=True" />
+  <node pkg="rviz" type="rviz" name="$(anon rviz)" args="-d $(find moony_bringup)/rviz_config/lidarImu.rviz" respawn="false" output="screen" />
+  
+  <include file="$(find moony_bringup)/launch/start_lidar.launch" >
+    <arg name="serial_port" value="/dev/ttyUSB1"/>
+    <arg name="frame_id" value="lidar_link"/>
+    <arg name="inverted" value="true"/>
+    <arg name="scan_topic" value="$(arg scan_topic)"/>
   </include>
 
-  <include file="$(find wit-imu-driver)/launch/WT901C.launch" >
-     <arg name="port" default="ttyUSB1"/>
-    <!-- TODO: edit the frame that the imu is attached to -->
+
+  <!-- <include file="$(find wit-imu-driver)/launch/WT901C.launch" >
+      <arg name="serial_port" value="ttyUSB1"/>
+      <arg name="frame_id" value="imu_link"/>
+      <arg name="imu_topic" value="moony/imu"/>
+      <arg name="publish_mag" value="false"/>
+  </include> -->
+
+  <include file="$(find moony_mapping)/launch/gmapping.launch.xml" >
+      <arg name="scan_topic"  value="$(arg scan_topic)" />
+      <arg name="base_frame"  value="base_footprint"/>
+      <arg name="odom_frame"  value="skid_drive" />
   </include>
 
-  <include file="$(find moony_odometry)/launch/moony_localization.launch" />
+  <!-- <include file="$(find moony_odometry)/launch/moony_localization.launch" /> -->
   <!-- TODO: add beacon -->
 </launch>
