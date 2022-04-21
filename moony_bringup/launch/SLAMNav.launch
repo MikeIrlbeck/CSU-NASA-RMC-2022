@@ -1,0 +1,22 @@
+<launch>
+  <arg name="scan_topic"  default="moony/laser/scan" />
+  <arg name="global_frame" default="skid_drive"/>
+
+
+    <include file="$(find moony_mapping)/launch/gmapping.launch.xml" >
+      <arg name="scan_topic"  value="$(arg scan_topic)" />
+      <arg name="base_frame"  value="base_footprint"/>
+      <arg name="odom_frame"  value="$(arg global_frame)" />
+      <arg name="linearUpdate" value="0.1"/>
+      <arg name="angularUpdate" value="0.1"/>
+  </include>
+
+  <include file="$(find moony_navigation_gazebo)/launch/move_base.launch" >
+     <arg name="no_static_map" value="true"/>
+     <arg name="cmd_topic" value="moony/cmd_vel" />
+     <arg name="global_frame" value="$(arg global_frame)"/>
+  </include>
+
+</launch>
+
+

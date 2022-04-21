@@ -9,7 +9,7 @@
     <rightFrontJoint>wheel_3_joint</rightFrontJoint>
     <leftRearJoint>wheel_2_joint</leftRearJoint>
     <rightRearJoint>wheel_4_joint</rightRearJoint>
-    <wheelSeparation>${wheel_y * 2}</wheelSeparation>
+    <wheelSeparation>0.6</wheelSeparation>
     <wheelDiameter>${wheel_collision_radius}</wheelDiameter>
     <robotBaseFrame>base_footprint</robotBaseFrame>
     <!-- should this be base_footprint? -->

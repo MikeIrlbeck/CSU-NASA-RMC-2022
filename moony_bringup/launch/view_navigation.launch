@@ -1,0 +1,4 @@
+<launch>
+  <node pkg="rviz" type="rviz" name="$(anon rviz)" args="-d $(find moony_description)/rviz_config/mapping_parameters.rviz" respawn="false" output="screen" />
+
+</launch>

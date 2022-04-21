@@ -1,0 +1,4 @@
+<launch>
+  <node pkg="rviz" type="rviz" name="$(anon rviz)" args="-d $(find moony_bringup)/rviz_config/lidarImu.rviz" respawn="false" output="screen" />
+
+</launch>

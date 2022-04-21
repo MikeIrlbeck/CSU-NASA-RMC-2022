@@ -2,6 +2,8 @@
   <arg name="scan_topic" />
   <arg name="base_frame" />
   <arg name="odom_frame" />
+  <arg name="linearUpdate" default="0.25"/>
+  <arg name="angularUpdate" default="0.19635"/>
 
   <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping" output="screen">
     <param name="base_frame" value="$(arg base_frame)"/>
@@ -18,10 +20,8 @@
     <param name="ymax" value="5.0"/>
     <param name="delta" value="0.05"/>
     <!-- other parameters -->
-    <!-- <param name="linearUpdate" value="0.25"/>
-    <param name="angularUpdate" value="0.19635"/> -->
-    <param name="linearUpdate" value="0.0"/>
-    <param name="angularUpdate" value="0.0"/>
+    <param name="linearUpdate" value="$(arg linearUpdate)"/>
+    <param name="angularUpdate" value="$(arg angularUpdate)"/>
     <param name="temporalUpdate" value="-1.0"/>
     <param name="particles" value="80"/> 
 

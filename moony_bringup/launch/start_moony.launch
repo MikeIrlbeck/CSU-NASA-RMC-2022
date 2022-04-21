@@ -4,12 +4,12 @@
    <!-- Load the urdf into the parameter server. -->   
   <param name="robot_description" command="$(find xacro)/xacro '$(find moony_description)/robot/real_robot.urdf.xacro'" />
     
+  <!-- TODO: load diff drive and other controllers -->
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" >
       <!-- <remap from="robot_description" to="robot_description" /> -->
       <!-- <remap from="joint_states" to="different_joint_states" /> -->
   </node>
   <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" args="_use_gui:=True" />
-  <node pkg="rviz" type="rviz" name="$(anon rviz)" args="-d $(find moony_bringup)/rviz_config/lidarImu.rviz" respawn="false" output="screen" />
   
   <include file="$(find moony_bringup)/launch/start_lidar.launch" >
     <arg name="serial_port" value="/dev/ttyUSB1"/>
@@ -18,23 +18,26 @@
     <arg name="scan_topic" value="$(arg scan_topic)"/>
   </include>
 
+  <include file="$(find wit_node)/launch/wit.launch" >
+      <arg name="port" value="/dev/ttyUSB2"/>
+      <!-- imu frame: imu_link -->
+  </include>
 
-  <include file="$(find wit-imu-driver)/launch/WT901C.launch" >
+
+  <include file="$(find moony_odometry)/launch/moony_localization.launch">
+    <arg name="sensors" value="ekf_real_robot.yaml" />
+    <!-- odom frame: skid drive -->
+  </include>
+
+
+
+  <!-- TODO: add beacon -->
+</launch>
+
+<!-- bad imu package -->
+  <!-- <include file="$(find wit-imu-driver)/launch/WT901C.launch" >
       <arg name="serial_port" value="ttyUSB2"/>
       <arg name="frame_id" value="imu_link"/>
       <arg name="imu_topic" value="moony/imu"/>
       <arg name="publish_mag" value="false"/>
-  </include>
-
-  <!-- <include file="$(find moony_odometry)/launch/moony_localization.launch">
-    <arg name="sensors" value="ekf_real_robot.yaml" />
-  </include>
-
-  <include file="$(find moony_mapping)/launch/gmapping.launch.xml" >
-      <arg name="scan_topic"  value="$(arg scan_topic)" />
-      <arg name="base_frame"  value="base_footprint"/>
-      <arg name="odom_frame"  value="skid_drive" />
   </include> -->
-
-  <!-- TODO: add beacon -->
-</launch>

@@ -1,0 +1,14 @@
+<launch>
+<!-- TF tree when slam run without localization -->
+<!-- map -> base_footprint -> base_link -->
+  <arg name="scan_topic"  value="moony/laser/scan" />
+
+  <include file="$(find moony_mapping)/launch/gmapping.launch.xml" >
+      <arg name="scan_topic"  value="$(arg scan_topic)" />
+      <arg name="base_frame"  value="base_footprint"/>
+      <arg name="odom_frame"  value="base_footprint" />
+      <arg name="linearUpdate" value="0.0"/>
+      <arg name="angularUpdate" value="0.0"/>
+  </include>
+
+</launch>
