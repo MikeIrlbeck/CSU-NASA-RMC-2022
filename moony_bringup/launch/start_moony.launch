@@ -9,6 +9,7 @@
       <!-- <remap from="robot_description" to="robot_description" /> -->
       <!-- <remap from="joint_states" to="different_joint_states" /> -->
   </node>
+  <!-- <remap from="scan" to="$(arg scan_topic)"/> -->
   <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" args="_use_gui:=True" />
   
   <include file="$(find moony_bringup)/launch/start_lidar.launch" >
