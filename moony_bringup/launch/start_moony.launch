@@ -16,6 +16,7 @@
   </node>
   <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" args="_use_gui:=True" />
   
+  <!-- SENSORS -->
   <!-- <include file="$(find moony_bringup)/launch/start_lidar.launch" >
     <arg name="serial_port" value="/dev/ttyUSB1"/>
     <arg name="frame_id" value="lidar_link"/>
@@ -27,15 +28,18 @@
       <arg name="port" value="/dev/ttyUSB1"/>
   </include> -->
   <!-- imu frame: imu_link -->
+  
+  <!-- <include file="$(find localizer_dwm1001)/launch/dwm1001.launch">
+    <arg name="serial_port_name" value="/dev/ttyACM1" />
+  </include> -->
+
+
 
   <!-- <include file="$(find moony_odometry)/launch/moony_localization.launch">
     <arg name="sensors" value="ekf_real_robot.yaml" />
   </include> -->
     <!-- odom frame: skid drive -->
 
-
-
-  <!-- TODO: add beacon -->
 </launch>
 
 <!-- bad imu package -->

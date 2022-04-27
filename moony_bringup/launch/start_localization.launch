@@ -1,5 +1,7 @@
 <launch>
-  <!-- <arg name="scan_topic"  value="moony/laser/scan" /> -->
+
+  <node pkg="moony_odometry" name="beacon_data_transfer" type="beacons.py" output="screen"> 
+  </node>
 
   <include file="$(find moony_odometry)/launch/moony_localization.launch">
     <arg name="sensors" value="ekf_real_robot.yaml" />
@@ -12,5 +14,4 @@
       <arg name="odom_frame"  value="base_footprint" />
   </include> -->
 
-  <!-- TODO: add beacon -->
 </launch>
