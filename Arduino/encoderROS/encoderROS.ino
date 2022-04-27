@@ -2,45 +2,72 @@
 
 #include <ros.h>
 #include <std_msgs/Int32.h>
-#define channelB 4
-#define channelA 5
+#define channelRB 4
+#define channelRA 5
+#define channelLB 11
+#define channelLA 12
 
 ros::NodeHandle nh;
 std_msgs::Int32 int_msg;
-ros::Publisher wheel1("wheel1", &int_msg);
+ros::Publisher PlungeR("PlungeR", &int_msg);
+ros::Publisher PlungeL("PlungeL", &int_msg);
 
-
-int counter = 0; 
-int currentStateB;
-int previousStateB; 
+int counterR = 0;
+int counterL = 0; 
+int currentStateRB;
+int previousStateRB;
+int currentStateLB;
+int previousStateLB; 
  
 void setup() {
-  pinMode (channelB,INPUT);
-  pinMode (channelA,INPUT);
+  pinMode (channelRB,INPUT);
+  pinMode (channelRA,INPUT);
+  pinMode (channelLB,INPUT);
+  pinMode (channelLB,INPUT);
   
   nh.initNode();
-  nh.advertise(wheel1);
-  previousStateB = digitalRead(channelB);
+  nh.advertise(PlungeR);
+  nh.advertise(PlungeL);
+  previousStateRB = digitalRead(channelRB);
+  previousStateLB = digitalRead(channelLB);
 }
 
 void loop() {
-  counter = count(counter);
+  counterR = count(counterR, 'R');
+  counterL = count(counterL, 'L');
   nh.spinOnce();
 }
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int count(int counter){
-  currentStateB = digitalRead(channelB);
-  if (currentStateB != previousStateB){ 
-    if (digitalRead(channelA) != currentStateB) {
-      counter --;
+int count(int counter, char side){
+  
+  if(side == 'R'){
+    currentStateRB = digitalRead(channelRB);
+    if (currentStateRB != previousStateRB){ 
+      if (digitalRead(channelRA) != currentStateRB) {
+        counter --;
+      }
+      else {
+        counter ++;
+      }
+    int_msg.data = counter;
+    PlungeR.publish( &int_msg );
     }
-    else {
-      counter ++;
-    }
-  int_msg.data = counter;
-  wheel1.publish( &int_msg );
+    previousStateRB = currentStateRB;
   }
-  previousStateB = currentStateB;
+  else{
+    currentStateLB = digitalRead(channelLB);
+    if (currentStateLB != previousStateLB){ 
+      if (digitalRead(channelLA) != currentStateLB) {
+        counter --;
+      }
+      else {
+        counter ++;
+      }
+    int_msg.data = counter;
+    PlungeL.publish( &int_msg );
+    }
+    previousStateLB = currentStateLB;
+  }
   return counter;
 }
