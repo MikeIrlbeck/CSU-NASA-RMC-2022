@@ -5,16 +5,17 @@
   <param name="robot_description" command="$(find xacro)/xacro '$(find moony_description)/robot/real_robot.urdf.xacro'" />
     
   <!-- TODO: load diff drive and other controllers -->
-   <!-- <rosparam command="load" file="$(find moony_bringup)/config/skid_steer.yaml" />
+   <rosparam command="load" file="$(find moony_bringup)/config/skid_steer.yaml" />
   
    <node pkg="controller_manager" name="base_controller_spawner"  type="spawner"
-        args="moony_joint_publisher moony_velocity_controller"/> -->
+        args="moony_joint_publisher "/>
+        <!-- moony_velocity_controller -->
  
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" >
       <!-- <remap from="robot_description" to="robot_description" /> -->
       <!-- <remap from="joint_states" to="different_joint_states" /> -->
   </node>
-  <!-- <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" args="_use_gui:=True" /> -->
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" args="_use_gui:=True" />
   
   <!-- SENSORS -->
   <include file="$(find moony_bringup)/launch/start_lidar.launch" >
@@ -25,7 +26,7 @@
   </include>
 
   <include file="$(find wit_node)/launch/wit.launch" >
-      <arg name="port" value="/dev/ttyUSB1"/>
+      <arg name="port" value="/dev/ttyUSB2"/>
   </include>
   <!-- imu frame: imu_link -->
   
@@ -46,9 +47,9 @@
     <arg name="scan_topic"  default="$(arg scan_topic)" />
     <arg name="global_frame" default="skid_drive"/>
   </include>
-
   <include file="$(find moony_bringup)/launch/view_navigation.launch" />
 
+  <!-- <include file="$(find moony_bringup)/launch/view_links_and_map.launch" /> -->
 
 </launch>
 

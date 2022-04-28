@@ -29,9 +29,9 @@
   </link>
 
     <joint name="beacon_joint" type="fixed">
-        <parent link="controls_box"/>
+        <parent link="base_link"/>
         <child link="beacon_link"/>
-        <origin xyz="${0.09/2} ${0.38/2} ${z/2 + 0.2985/2}" rpy="0 0 0"/> <!-- joint location -->
+        <origin xyz="${-0.47} ${0.0} ${z/2 + 0.01}" rpy="0 0 0"/> <!-- joint location -->
     </joint>
 
 </robot>

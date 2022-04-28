@@ -11,7 +11,7 @@ def func(tag):
     data = PoseWithCovarianceStamped()
 
     data.header.stamp =  rospy.Time.now()
-    data.header.frame_id = "beacon_link" # TODO: make this; should it be "map" ?
+    data.header.frame_id = "map" # TODO: make this; should it be "map" ?
 
     data.pose.pose.position.x = tag.x 
     data.pose.pose.position.y = tag.y 

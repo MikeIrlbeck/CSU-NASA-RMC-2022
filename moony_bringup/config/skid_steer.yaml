@@ -2,44 +2,44 @@ moony_joint_publisher:
   type: "joint_state_controller/JointStateController"
   publish_rate: 50
   # https://fjp.at/posts/ros/ros-control/
-moony_velocity_controller:
-  type: "diff_drive_controller/DiffDriveController"
-  left_wheel: ['wheel_1_joint', 'wheel_2_joint'] # TODO: make these names better
-  right_wheel: ['wheel_3_joint', 'wheel_4_joint']
-  publish_rate: 50
-  pose_covariance_diagonal: [0.001, 0.001, 1000000.0, 1000000.0, 1000000.0, 0.03]
-  twist_covariance_diagonal: [0.001, 0.001, 0.001, 1000000.0, 1000000.0, 0.03]
-  # husky control parameters: https://github.com/husky/husky/blob/noetic-devel/husky_control/config/control.yaml
-  # pose_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.03]
-  # twist_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.03]
-  cmd_vel_timeout: 0.25
-  velocity_rolling_window_size: 2
-  publish_cmd: true
+# moony_velocity_controller:
+#   type: "diff_drive_controller/DiffDriveController"
+#   left_wheel: ['wheel_1_joint', 'wheel_2_joint'] # TODO: make these names better
+#   right_wheel: ['wheel_3_joint', 'wheel_4_joint']
+#   publish_rate: 50
+#   pose_covariance_diagonal: [0.001, 0.001, 1000000.0, 1000000.0, 1000000.0, 0.03]
+#   twist_covariance_diagonal: [0.001, 0.001, 0.001, 1000000.0, 1000000.0, 0.03]
+#   # husky control parameters: https://github.com/husky/husky/blob/noetic-devel/husky_control/config/control.yaml
+#   # pose_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.03]
+#   # twist_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.03]
+#   cmd_vel_timeout: 0.25
+#   velocity_rolling_window_size: 2
+#   publish_cmd: true
 
-  base_frame_id: base_footprint
+#   base_frame_id: base_footprint
 
-  # Odometry fused with IMU is published by robot_localization, so
-  # no need to publish a TF based on encoders alone.
-  enable_odom_tf: false
-  odom_frame_id: helloKitty
+#   # Odometry fused with IMU is published by robot_localization, so
+#   # no need to publish a TF based on encoders alone.
+#   enable_odom_tf: false
+#   odom_frame_id: helloKitty
 
-  # Wheel separation and radius multipliers
-  wheel_separation: 0.55
-  wheel_radius: 0.17
-  # wheel_separation_multiplier: 0.55 # default: 1.0
-  # wheel_radius_multiplier    : 0.17 # default: 1.0
+#   # Wheel separation and radius multipliers
+#   wheel_separation: 0.55
+#   wheel_radius: 0.17
+#   # wheel_separation_multiplier: 0.55 # default: 1.0
+#   # wheel_radius_multiplier    : 0.17 # default: 1.0
 
-  # Velocity and acceleration limits
-  # Whenever a min_* is unspecified, default to -max_*
-  linear:
-    x:
-      has_velocity_limits    : true
-      max_velocity           : 1.0   # m/s
-      has_acceleration_limits: true
-      max_acceleration       : 3.0   # m/s^2
-  angular:
-    z:
-      has_velocity_limits    : true
-      max_velocity           : 2.0   # rad/s
-      has_acceleration_limits: true
-      max_acceleration       : 5.0   # rad/s^2
+#   # Velocity and acceleration limits
+#   # Whenever a min_* is unspecified, default to -max_*
+#   linear:
+#     x:
+#       has_velocity_limits    : true
+#       max_velocity           : 1.0   # m/s
+#       has_acceleration_limits: true
+#       max_acceleration       : 3.0   # m/s^2
+#   angular:
+#     z:
+#       has_velocity_limits    : true
+#       max_velocity           : 2.0   # rad/s
+#       has_acceleration_limits: true
+#       max_acceleration       : 5.0   # rad/s^2

@@ -1,6 +1,6 @@
 #Configuation for robot odometry EKF
 #
-frequency: 10
+frequency: 5
     
 two_d_mode: true
 print_diagnostics: true

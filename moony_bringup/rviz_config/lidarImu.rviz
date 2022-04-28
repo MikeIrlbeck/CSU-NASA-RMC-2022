@@ -29,7 +29,7 @@ Panels:
     Experimental: false
     Name: Time
     SyncMode: 0
-    SyncSource: ""
+    SyncSource: LaserScan
 Preferences:
   PromptSaveOnExit: true
 Toolbars:
@@ -75,6 +75,11 @@ Visualization Manager:
           Show Trail: false
           Value: true
         beacon_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        controls_box:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -126,17 +131,13 @@ Visualization Manager:
           Value: true
         beacon_link:
           Value: true
+        controls_box:
+          Value: true
         imu_link:
           Value: true
         lidar_link:
           Value: true
-        wheel_1_link:
-          Value: true
-        wheel_2_link:
-          Value: true
-        wheel_3_link:
-          Value: true
-        wheel_4_link:
+        skid_drive:
           Value: true
       Marker Alpha: 1
       Marker Scale: 0.25
@@ -145,22 +146,16 @@ Visualization Manager:
       Show Axes: true
       Show Names: true
       Tree:
-        base_footprint:
-          base_link:
-            beacon_link:
-              {}
-            imu_link:
-              {}
-            lidar_link:
-              {}
-            wheel_1_link:
-              {}
-            wheel_2_link:
-              {}
-            wheel_3_link:
-              {}
-            wheel_4_link:
-              {}
+        skid_drive:
+          base_footprint:
+            base_link:
+              controls_box:
+                beacon_link:
+                  {}
+              imu_link:
+                {}
+              lidar_link:
+                {}
       Update Interval: 0
       Value: true
     - Alpha: 1
@@ -239,7 +234,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 0.6580875515937805
+      Distance: 12.309627532958984
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -247,17 +242,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: 0.4743185341358185
-        Y: -0.0666469931602478
-        Z: 0.017839018255472183
+        X: 0.7397019863128662
+        Y: -0.3083541691303253
+        Z: -0.15753130614757538
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.14479760825634003
+      Pitch: 0.5197973251342773
       Target Frame: <Fixed Frame>
-      Yaw: 5.930413246154785
+      Yaw: 0.5422325134277344
     Saved: ~
 Window Geometry:
   Displays:
@@ -275,5 +270,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1600
-  X: 28
+  X: 72
   Y: 27

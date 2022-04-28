@@ -78,6 +78,12 @@
   <exec_depend>ros_control</exec_depend>
   <exec_depend>ros_control</exec_depend>
   
+  <build_depend>move_base</build_depend>
+  <build_depend>dwa_local_planner</build_depend>
+  <build_export_depend>move_base</build_export_depend>
+  <build_export_depend>dwa_local_planner</build_export_depend>
+  <exec_depend>move_base</exec_depend>
+  <exec_depend>dwa_local_planner</exec_depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>
