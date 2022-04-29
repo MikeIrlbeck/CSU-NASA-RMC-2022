@@ -14,6 +14,8 @@ ros::NodeHandle nh;
 
 void callback(const sensor_msgs::Joy& joy)
 { 
+  // these will be mapped to int values between -127 and 127
+  // -127 is reverse 127 is forward
   int s0 = 0;
   int s1 = 0;
   int s2 = 0;
