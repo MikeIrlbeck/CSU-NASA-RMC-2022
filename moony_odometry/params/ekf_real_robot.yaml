@@ -13,13 +13,13 @@ imu0_config: [false, false, false, # linear pos
 imu0_differential: false
 
 # TODO: add a pose0 input data from the beacan
-# pose0: moony/skid_drive
-# pose0_config: [true, true, true, # linear pos
-#                false, false, false,
-#                false, false, false,
-#                false, false, false,
-#                false, false, false]
-# pose0_differential: false
+pose0: moony/skid_drive
+pose0_config: [true, true, false, # linear pos
+               false, false, false,
+               false, false, false,
+               false, false, false,
+               false, false, false]
+pose0_differential: false
 
 # TODO
 # attach beacon to a frame
