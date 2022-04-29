@@ -31,5 +31,6 @@
         <child link="imu_link"/>
         <origin xyz="0.47 0.15 -${+0.015 + 0.005/2}" rpy="0 3.141592653589793 1.5707963267948966"/> <!-- joint location -->
     </joint>
+    <!-- rpy="0 3.141592653589793 1.5707963267948966" upside down, y direction in forward orientation, z down-->
 
 </robot>

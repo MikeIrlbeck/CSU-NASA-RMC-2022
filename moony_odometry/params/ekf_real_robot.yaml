@@ -4,22 +4,30 @@
 publish_tf: true
 world_frame: skid_drive 
 
-# imu0: moony/imu
-# imu0_config: [false, false, false, # linear pos
-#               false, false, true,   # angular pos
-#               false, false, false, # linear vel
-#               false, false, true,   # angular vel
-#               true, false, false]  # linear acc
-# imu0_differential: false
+imu0: moony/imu_smooth
+imu0_config: [false, false, false, # linear pos
+              false, false, true,   # angular pos
+              false, false, false, # linear vel
+              false, false, true,   # angular vel
+              true, false, false]  # linear acc
+imu0_differential: false
 
-# TODO: add a pose0 input data from the beacan
-pose0: moony/skid_drive
+# ONLY HAVE ENTRIES HERE THAT ARE ACTIVEY BEING PUBLISHED
+pose0: moony/beacon_back_left
 pose0_config: [true, true, false, # linear pos
                false, false, false,
                false, false, false,
                false, false, false,
                false, false, false]
 pose0_differential: false
+
+# pose0: moony/beacon_back_right
+# pose0_config: [true, true, false, # linear pos
+#                false, false, false,
+#                false, false, false,
+#                false, false, false,
+#                false, false, false]
+# pose0_differential: false
 
 # TODO
 # attach beacon to a frame

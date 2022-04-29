@@ -5,7 +5,7 @@ from localizer_dwm1001.msg import Tag
 from geometry_msgs.msg import PoseWithCovarianceStamped
 from std_msgs.msg import String, Float64
 
-pub = rospy.Publisher('moony/beacon_back_left', PoseWithCovarianceStamped, queue_size=10)
+pub = rospy.Publisher('moony/beacon_back_right', PoseWithCovarianceStamped, queue_size=10)
 
 def func(tag):
     data = PoseWithCovarianceStamped()
@@ -43,7 +43,7 @@ def listener():
   
     rospy.init_node('listener', anonymous=True)
 
-    rospy.Subscriber("dwm1001/tag", Tag, callback)
+    rospy.Subscriber("dwm1001/tagSecond", Tag, callback)
 
     # spin() simply keeps python from exiting until this node is stopped
     rospy.spin()
