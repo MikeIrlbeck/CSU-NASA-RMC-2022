@@ -55,7 +55,7 @@
  <xacro:include filename="$(find moony_description)/robot/Parts/real_lidar.urdf.xacro" />
  <xacro:include filename="$(find moony_description)/robot/Parts/real_imu.urdf.xacro" />
  <xacro:include filename="$(find moony_description)/robot/Parts/real_beacon.urdf.xacro" />
-
+ <xacro:include filename="$(find moony_description)/robot/Parts/real_controls_box.xacro" />
  <!-- <xacro:include filename="$(find moony_description)/robot/Parts/mount_cameras.urdf.xacro" />
     <xacro:camera side="left" x="0.47" y="0.17" />
     <xacro:camera side="right" x="0.47" y="-0.17" /> -->

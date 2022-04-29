@@ -1,20 +1,20 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="moony">
 
-<xacro:property name="z" value="${0.125}" /> 
+<xacro:property name="z" value="${0.2985}" /> 
 
- <link name="beacon_link">
+ <link name="controls_box">
     <collision>
       <origin xyz="0 0 ${.05/2}" rpy="0 0 0"/>
       <geometry>
-        <box size="0.05 0.05 ${z}"/>
+        <box size="0.09 0.38 ${z}"/>
       </geometry>
     </collision>
 
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
-        <box size="0.025 0.025 0.075"/>
+        <box size="0.09 0.38 ${z}"/>
       </geometry>
     </visual>
 
@@ -28,10 +28,10 @@
     </inertial>
   </link>
 
-    <joint name="beacon_joint" type="fixed">
-        <parent link="controls_box"/>
-        <child link="beacon_link"/>
-        <origin xyz="${0.09/2} ${0.38/2} ${z/2 + 0.2985/2}" rpy="0 0 0"/> <!-- joint location -->
+    <joint name="controls_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="controls_box"/>
+        <origin xyz="0.47 0 ${z/2 + 0.025}" rpy="0 0 0"/> <!-- joint location -->
     </joint>
 
 </robot>

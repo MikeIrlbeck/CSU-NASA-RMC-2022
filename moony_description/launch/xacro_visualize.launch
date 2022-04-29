@@ -1,7 +1,7 @@
 <launch>
 
     <!-- to launch USE: roslaunch nasa_rmc urdf_visualize.launch model:='$(find myrobot_package)/urdf/myrobot.urdf' -->
-    <arg name="model" default=""/>
+    <arg name="model" default="$(find moony_description)/robot/real_robot.urdf.xacro"/>
 
     <param name="robot_description" command="$(find xacro)/xacro $(arg model)" />
     <!--// Here it is loading the URDF file to the param server variable called "robot_description." Bear in mind that if you are loading more than one robot, you will have to load them in different variables, like "robot1_description" and "robot2_description." -->
