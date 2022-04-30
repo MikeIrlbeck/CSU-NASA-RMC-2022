@@ -29,7 +29,7 @@ if __name__ == '__main__':
 
         print(Mining_client("startup"))
         print(Mining_client("goal1"))
-        print(Mining_client("goal2"))
+        # print(Mining_client("goal2"))
 
     except rospy.ROSInterruptException:
         print("program interrupted before completion") 

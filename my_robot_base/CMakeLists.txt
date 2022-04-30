@@ -47,20 +47,33 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-add_executable(${PROJECT_NAME}_node 
+## ${PROJECT_NAME}
+add_executable(my_robot_base_node 
 #  src/my_robot_hw_interface.cpp
   src/my_robot_base.cpp
 )
+add_executable(moony_base_node 
+#  src/my_robot_hw_interface.cpp
+  src/moony_base.cpp
+)
 
-target_link_libraries(${PROJECT_NAME}_node 
+target_link_libraries(my_robot_base_node 
   ${catkin_LIBRARIES}
 )
 
-add_dependencies(${PROJECT_NAME}_node
+add_dependencies(my_robot_base_node
   ${${PROJECT_NAME}_EXPORTED_TARGETS}
   ${catkin_EXPORTED_TARGETS}
 )
 
+target_link_libraries(moony_base_node 
+  ${catkin_LIBRARIES}
+)
+
+add_dependencies(moony_base_node
+  ${${PROJECT_NAME}_EXPORTED_TARGETS}
+  ${catkin_EXPORTED_TARGETS}
+)
 # my_robot Hardware Interface
 #add_library(${PROJECT_NAME}_node
 #  src/my_robot_hw_interface.cpp

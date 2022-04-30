@@ -29,7 +29,7 @@ Panels:
     Experimental: false
     Name: Time
     SyncMode: 0
-    SyncSource: LaserScan
+    SyncSource: ""
 Preferences:
   PromptSaveOnExit: true
 Toolbars:
@@ -89,7 +89,17 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        left_linear_actuator_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         lidar_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        right_linear_actuator_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -135,9 +145,19 @@ Visualization Manager:
           Value: true
         imu_link:
           Value: true
+        left_linear_actuator_link:
+          Value: true
         lidar_link:
           Value: true
-        skid_drive:
+        right_linear_actuator_link:
+          Value: true
+        wheel_1_link:
+          Value: true
+        wheel_2_link:
+          Value: true
+        wheel_3_link:
+          Value: true
+        wheel_4_link:
           Value: true
       Marker Alpha: 1
       Marker Scale: 0.25
@@ -146,16 +166,28 @@ Visualization Manager:
       Show Axes: true
       Show Names: true
       Tree:
-        skid_drive:
-          base_footprint:
-            base_link:
-              controls_box:
-                beacon_link:
-                  {}
-              imu_link:
-                {}
-              lidar_link:
-                {}
+        base_footprint:
+          base_link:
+            beacon_link:
+              {}
+            controls_box:
+              {}
+            imu_link:
+              {}
+            left_linear_actuator_link:
+              {}
+            lidar_link:
+              {}
+            right_linear_actuator_link:
+              {}
+            wheel_1_link:
+              {}
+            wheel_2_link:
+              {}
+            wheel_3_link:
+              {}
+            wheel_4_link:
+              {}
       Update Interval: 0
       Value: true
     - Alpha: 1
@@ -234,7 +266,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 12.309627532958984
+      Distance: 2.654831647872925
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -242,17 +274,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: 0.7397019863128662
-        Y: -0.3083541691303253
-        Z: -0.15753130614757538
+        X: 0.24932096898555756
+        Y: 0.1686069369316101
+        Z: 0.14634227752685547
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.5197973251342773
+      Pitch: 0.8247970342636108
       Target Frame: <Fixed Frame>
-      Yaw: 0.5422325134277344
+      Yaw: 0.537232518196106
     Saved: ~
 Window Geometry:
   Displays:

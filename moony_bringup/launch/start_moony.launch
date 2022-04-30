@@ -25,14 +25,14 @@
     <arg name="scan_topic" value="$(arg scan_topic)"/>
   </include> -->
 
-  <include file="$(find wit_node)/launch/wit.launch" >
+  <!-- <include file="$(find wit_node)/launch/wit.launch" >
       <arg name="port" value="/dev/ttyUSB2"/>
-  </include>
+  </include> -->
   <!-- imu frame: imu_link -->
   
-  <include file="$(find localizer_dwm1001)/launch/dwm1001.launch">
+  <!-- <include file="$(find localizer_dwm1001)/launch/dwm1001.launch">
     <arg name="serial_port_name" value="/dev/ttyACM1" />
-  </include>
+  </include> -->
 
   <!-- <include file="$(find localizer_dwm1001)/launch/dwm1001Additional.launch">
     <arg name="serial_port_name" value="/dev/ttyACM2" />
@@ -45,15 +45,15 @@
   </include> -->
     <!-- odom frame: skid drive -->
 
-  <include file="$(find moony_bringup)/launch/start_localization.launch" />
+  <!-- <include file="$(find moony_bringup)/launch/start_localization.launch" /> -->
 
-  <include file="$(find moony_bringup)/launch/SLAMNav.launch" >
+  <!-- <include file="$(find moony_bringup)/launch/SLAMNav.launch" >
     <arg name="scan_topic"  default="$(arg scan_topic)" />
     <arg name="global_frame" default="skid_drive"/>
   </include>
-  <include file="$(find moony_bringup)/launch/view_navigation.launch" />
+  <include file="$(find moony_bringup)/launch/view_navigation.launch" /> -->
 
-  <!-- <include file="$(find moony_bringup)/launch/view_links_and_map.launch" /> -->
+  <include file="$(find moony_bringup)/launch/view_links_and_map.launch" />
 
 </launch>
 

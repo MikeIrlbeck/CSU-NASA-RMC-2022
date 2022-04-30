@@ -21,6 +21,7 @@
     
     <!-- Show in Rviz   -->
     <!--<node name="rviz" pkg="rviz" type="rviz" args="-d $(find nasa_rmc)/rviz_config/urdf.rviz"/>-->
-    <node name="rviz" pkg="rviz" type="rviz" args=""/>
+     <node pkg="rviz" type="rviz" name="$(anon rviz)" args="-d $(find moony_description)/rviz_config/viewing_gazebo_lidar.rviz" respawn="false" output="screen" />
+     
     <!-- //Run RVIZ. The part about loading your own RVIZ is commented. The first time you launch this, just save the RVIZ config file and then you will have all that is needed. -->
 </launch>

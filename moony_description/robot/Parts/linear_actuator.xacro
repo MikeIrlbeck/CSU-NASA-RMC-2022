@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="moony">
+
+<!-- for XACRO math - SPACES matter -->
+
+<xacro:property name="actuator_x" value="${0.325}" /> 
+<xacro:property name="actuator_y" value="${0.025}" /> 
+<xacro:property name="actuator_z" value="${0.025}" /> 
+
+
+<xacro:macro name="linear_actuator" params="side x y z">
+   <link name="${side}_linear_actuator_link">
+        <inertial>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <mass value="5" />
+            <inertia ixx="0.02" ixy="0" ixz="0" iyy="0.02" iyz="0" izz="0.04"/>
+             <!-- values taken from solidworks; the origin is the position of the part
+                w.r.t its axes for the second moment of mass values  -->
+        </inertial>
+
+        <collision>
+            <origin rpy="0 0 0" xyz="0 0 0"/> <!-- pre joint orientation -->
+            <geometry>
+                <box size="${actuator_x} ${actuator_y} ${actuator_z}"/>
+            </geometry>
+        </collision>
+
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/> <!-- center of the wheel -->
+            <geometry>
+                <box size="${actuator_x} ${actuator_y} ${actuator_z}"/>
+            </geometry>
+            <!-- <material name="white"/> only used in rviz for simple geometry -->
+        </visual>
+    </link>
+
+    <joint name="${side}_linear_actuator_joint" type="prismatic">
+        <parent link="base_link"/>
+        <child link="${side}_linear_actuator_link"/>
+        <origin xyz="${x + actuator_x/2} ${y + actuator_y} ${z + actuator_z}" rpy="0 0 0"/> <!-- joint location -->
+        <limit  effort="5.0" 
+                velocity="0"
+                lower="40.0"
+                upper="900.0"/>
+        <axis xyz="1 0 0"/>
+    </joint>
+
+    <transmission name="${side}_linear_actuator_trans">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="${side}_linear_actuator_joint">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="${side}_linear_actuator_motor">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+        <!-- previous interface: VelocityJointInterface , EffortJointInterface-->
+    </transmission>
+</xacro:macro>
+
+</robot>

@@ -2,7 +2,7 @@
 import math
 import rospy
 import actionlib
-from std_msgs.msg import String
+from std_msgs.msg import String, Int32
 
 # Example of importing action messages
 # from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal, MoveBaseResult, MoveBaseFeedback
@@ -30,7 +30,7 @@ class MiningAction(object):
 
     def startUp(self):
         self._result = MineResult()
-        print("Server ACTIVE")
+        print("Mine Server ACTIVE")
 
     # Example of sending a goal to another action server
     # def sendNavigation(self, x, y, yaw):
@@ -59,7 +59,35 @@ class MiningAction(object):
     #     myPath.header.frame_id = self.frame
 
     # def subscribe_and_do_something(self, goalList):
+    def unbox(self):
+        # publish desired position of linear actuators
+        pubLinearLeft = rospy.Publisher('moony/linearActuator/left', Int32, queue_size=100)
+        pubLinearRight = rospy.Publisher('moony/linearActuator/right', Int32, queue_size=100)
 
+        # publish desired position of plunge motors
+        pubPlungLeft = rospy.Publisher('moony/plunge/left', Int32, queue_size=100)
+        pubPlungeRight = rospy.Publisher('moony/plunge/right', Int32, queue_size=100)
+
+        linearPosGoal = 500
+        plungePosGoal = 8000
+
+        i = 0.0
+        rate = rospy.Rate(10)  # 10 hz
+        while (i < 2):
+            pubLinearLeft.publish(linearPosGoal)
+            pubLinearRight.publish(linearPosGoal)
+            pubPlungLeft.publish(plungePosGoal)
+            pubPlungeRight.publish(plungePosGoal)
+            
+            rate.sleep()
+            i += 1
+        if 1 == 1:
+            self._result = MineResult(True)
+
+        fb = MineFeedback("Unboxing the robot")
+        self._actionServer.publish_feedback(fb)
+        self._result = MineResult(True)
+        
     def goal1(self, distance):
         fb = MineFeedback("doing goal 1: %d" % distance)
         self._actionServer.publish_feedback(fb)
@@ -95,8 +123,9 @@ class MiningAction(object):
         
         if(str(goal).find("startup") != -1):
             # if(goal == "startup"):
-            print("startup time")
-            self._result = MineResult(True)
+            # print("startup time")
+            self.unbox()
+            # self._result = MineResult(True)
         elif(str(goal).find("goal1") != -1):
             self.goal1(23)
         elif(str(goal).find("goal2") != -1):

@@ -1,0 +1,40 @@
+<!-- https://answers.ros.org/question/221093/basic-diff_drive-question/ -->
+<!-- https://github.com/ros-controls/ros_controllers/tree/kinetic-devel/diff_drive_controller/test -->
+
+<launch>
+
+	<!-- Load robot model -->
+      <!-- <param name="robot_description" command="$(find xacro)/xacro '$(find moony_description)/robot/real_robot.urdf.xacro'" /> -->
+
+	<!-- <param name="robot_description"  command="$(find xacro)/xacro '$(find my_robot_description)/urdf/my_robot.xacro' "/> -->
+      <!-- - -inorder -->
+      
+
+      <node name="moony_base_node" 
+          pkg="my_robot_base" 
+          type="moony_base_node" output="screen" > 
+          <!-- TODO: new hw interface -->
+
+          <!-- <remap from="/mobile_base_controller/cmd_vel" to="/moony/cmd_vel"/> -->
+      </node>
+
+    <!-- Load controller config -->
+    <rosparam command="load" 
+              file="$(find my_robot_control)/config/moony_position_control.yaml"/>
+
+    <node name="hardware_controller_spawner" 
+          pkg="controller_manager" 
+          type="spawner" 
+          output="screen" 
+          args="joint_state_controller leftLinearActuator_position_controller rightLinearActuator_position_controller" />
+          <!-- TODO: add controllers with updated names -->
+
+
+      <!-- <node name="robot_state_publisher" 
+            pkg="robot_state_publisher" 
+            type="robot_state_publisher" 
+            respawn="false" 
+            output="screen" /> -->
+
+      <!-- <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" args="_use_gui:=True" /> -->
+</launch>
