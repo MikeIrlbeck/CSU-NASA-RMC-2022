@@ -11,7 +11,7 @@
       
 
       <node name="moony_base_node" 
-          pkg="my_robot_base" 
+          pkg="moony_base" 
           type="moony_base_node" output="screen" > 
           <!-- TODO: new hw interface -->
 
@@ -20,7 +20,7 @@
 
     <!-- Load controller config -->
     <rosparam command="load" 
-              file="$(find my_robot_control)/config/moony_position_control.yaml"/>
+              file="$(find moony_control)/config/moony_position_control.yaml"/>
 
     <node name="hardware_controller_spawner" 
           pkg="controller_manager" 

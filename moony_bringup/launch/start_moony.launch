@@ -17,6 +17,9 @@
   </node>
   <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" args="_use_gui:=True" />
   
+  <include file="$(find moony_base)/launch/moony_hw_control.launch" />
+
+  
   <!-- SENSORS -->
   <!-- <include file="$(find moony_bringup)/launch/start_lidar.launch" >
     <arg name="serial_port" value="/dev/ttyUSB1"/>

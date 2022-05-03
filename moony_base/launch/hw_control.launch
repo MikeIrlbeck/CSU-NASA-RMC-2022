@@ -11,7 +11,7 @@
       
 
       <node name="my_robot_base_node" 
-          pkg="my_robot_base" 
+          pkg="moony_base" 
           type="my_robot_base_node" output="screen" >
           <remap from="/mobile_base_controller/cmd_vel" to="/moony/cmd_vel"/>
       </node>

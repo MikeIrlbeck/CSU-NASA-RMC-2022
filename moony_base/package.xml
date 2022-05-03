@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package>
-  <name>my_robot_base</name>
+  <name>moony_base</name>
   <version>0.0.1</version>
   <description>The my_robot_base package</description>
 

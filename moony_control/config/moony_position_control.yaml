@@ -18,10 +18,10 @@ joint_state_controller:
 leftLinearActuator_position_controller:
   type: effort_controllers/JointPositionController
   joint: left_linear_actuator_joint
-  pid: {p: 100.0, i: 0.1, d: 10.0}
+  pid: {p: 0.125, i: 0.001, d: 0.025}
   #pid: {p: 50.0, i: 0.1, d: 0.0}
 rightLinearActuator_position_controller:
   type: effort_controllers/JointPositionController
   joint: right_linear_actuator_joint
-  pid: {p: 100.0, i: 0.1, d: 10.0}
+  pid: {p: 0.125, i: 0.001, d: 0.025}
   #pid: {p: 50.0, i: 0.1, d: 0.0}

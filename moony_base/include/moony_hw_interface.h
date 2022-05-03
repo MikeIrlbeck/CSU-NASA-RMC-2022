@@ -199,15 +199,15 @@ MyRobotHWInterface::MyRobotHWInterface()
       hardware_interface::JointStateHandle state_handle(os.str(), &pos[i], &vel[i], &eff[i]);
       jnt_state_interface.registerHandle(state_handle);
 
-      hardware_interface::JointHandle vel_handle(jnt_state_interface.getHandle(os.str()), &cmd[i]);
-      jnt_eff_interface.registerHandle(vel_handle);
+      hardware_interface::JointHandle pos_handle(jnt_state_interface.getHandle(os.str()), &cmd[i]);
+      jnt_eff_interface.registerHandle(pos_handle);
     }
     registerInterface(&jnt_state_interface);
     registerInterface(&jnt_eff_interface);
 
 	// Initialize publishers and subscribers
-	left_linear_actuator_pos_pub = nh.advertise<std_msgs::Float64>("moony/left_linear_actuator_pos_cmd", 1);
-	right_linear_actuator_pos_pub = nh.advertise<std_msgs::Float64>("moony/right_linear_actuator_pos_cmd", 1);
+	left_linear_actuator_pos_pub = nh.advertise<std_msgs::Float64>("moony/left_linear_actuator_eff_cmd", 1);
+	right_linear_actuator_pos_pub = nh.advertise<std_msgs::Float64>("moony/right_linear_actuator_eff_cmd", 1);
 
 	left_linear_actuator_pos_sub = nh.subscribe("moony/left_linear_actuator_pos_feedback", 1, &MyRobotHWInterface::leftLinearActuatorPosCallBack, this);
 	right_linear_actuator_pos_sub = nh.subscribe("moony/right_linear_actuator_pos_feedback", 1, &MyRobotHWInterface::rightLinearActuatorPosCallBack, this);
