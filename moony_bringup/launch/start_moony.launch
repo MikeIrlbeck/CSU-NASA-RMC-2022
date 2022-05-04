@@ -19,7 +19,8 @@
   
   <include file="$(find moony_base)/launch/moony_hw_control.launch" />
 
-  
+  <include file="$(find moony_bringup)/launch/view_links_and_map.launch" />
+
   <!-- SENSORS -->
   <!-- <include file="$(find moony_bringup)/launch/start_lidar.launch" >
     <arg name="serial_port" value="/dev/ttyUSB1"/>
@@ -56,7 +57,7 @@
   </include>
   <include file="$(find moony_bringup)/launch/view_navigation.launch" /> -->
 
-  <include file="$(find moony_bringup)/launch/view_links_and_map.launch" />
+ 
 
 </launch>
 

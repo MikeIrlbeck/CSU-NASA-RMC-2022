@@ -1,0 +1,18 @@
+<launch>
+  
+  <include file="$(find moony_base)/launch/start_moony.launch" />
+  
+  <!-- SENSORS -->
+  <include file="$(find moony_bringup)/launch/start_lidar.launch" >
+    <arg name="serial_port" value="/dev/ttyUSB1"/>
+    <arg name="frame_id" value="lidar_link"/>
+    <arg name="inverted" value="true"/>
+    <arg name="scan_topic" value="$(arg scan_topic)"/>
+  </include>
+
+  <include file="$(find localizer_dwm1001)/launch/dwm1001.launch">
+    <arg name="serial_port_name" value="/dev/ttyACM1" />
+  </include>
+
+</launch>
+
