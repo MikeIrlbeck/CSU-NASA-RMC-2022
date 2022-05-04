@@ -1,0 +1,29 @@
+Terminal 1
+	roscore
+
+Terminal 2
+	rosrun joy joy_node 
+
+Terminal 3 
+	roslaunch moony_bringup start_moony.launch
+	OR
+	roslaunch moony_bringup start_moonyWithLidar.launch
+	OR
+	roslaunch moony_bringup start_moonyWithLidarAndBeacon.launch
+
+Terminal 4 - enable communication to the Tensy
+	rosrun rosserial_python serial_node.py /dev/ttyACM1
+
+Terminal 5 - for topic visulization and sending commands
+	rqt
+
+	// see topic monitor
+	// see topic publisher
+	// dynamic reconfigure to change PID parameters
+
+Misc
+
+To view USB ports
+	ls /dev/ | grep USB
+To view ACM ports
+	ls /dev/ | grep ACM
