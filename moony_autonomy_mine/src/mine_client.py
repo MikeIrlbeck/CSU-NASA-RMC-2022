@@ -31,5 +31,7 @@ if __name__ == '__main__':
         print(Mining_client("goal1"))
         # print(Mining_client("goal2"))
 
+        # self.noise = rospy.wait_for_message("goal2Topic", String, timeout=None)
+
     except rospy.ROSInterruptException:
         print("program interrupted before completion") 
