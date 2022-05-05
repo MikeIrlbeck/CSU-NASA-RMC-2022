@@ -54,7 +54,7 @@
 // ostringstream
 #include <sstream>
 
-const unsigned int NUM_JOINTS = 2;
+const unsigned int NUM_JOINTS = 4;
 
 /// \brief Hardware interface for a robot
 class MyRobotHWInterface : public hardware_interface::RobotHW
@@ -77,18 +77,28 @@ public:
 	right_actuator_pos_msg.data = position_right;
 	left_linear_actuator_pos_pub.publish(left_actuator_pos_msg);
 	right_linear_actuator_pos_pub.publish(right_actuator_pos_msg);
+
+	left_plunge_pos_pub.publish(left_plunge_pos_msg);
+	right_plunge_pos_pub.publish(right_plunge_pos_msg);
   }
 
   /**
    * Reading encoder values and setting position and velocity of enconders 
    */
   void read(const ros::Duration &period) {
-    double ang_distance_left = _wheel_angle[0]; // 40-900
-    double ang_distance_right = _wheel_angle[1];
-    pos[0] = ang_distance_left;
+    double ang_distance_left = _motor_pos[0]; // 40-900
+    double ang_distance_right = _motor_pos[1];
+    double plunge_left = _motor_pos[2]; // 40-900
+    double plunge_right = _motor_pos[3];
+
+    pos[0] = ang_distance_left; // absolute
     vel[0] += ang_distance_left / period.toSec();
-    pos[1] = ang_distance_right;
+    pos[1] = ang_distance_right; // absolute
     vel[1] += ang_distance_right / period.toSec();
+    pos[2] += plunge_left; // absolute
+    vel[2] += plunge_left / period.toSec();
+    pos[3] += plunge_right; // absolute
+    vel[3] += plunge_right / period.toSec();
     /*
     std::ostringstream os;
     for (unsigned int i = 0; i < NUM_JOINTS - 1; ++i)
@@ -118,6 +128,8 @@ public:
 private:
   hardware_interface::JointStateInterface jnt_state_interface;
   hardware_interface::EffortJointInterface jnt_eff_interface;
+  hardware_interface::PositionJointInterface jnt_pos_interface;
+
   double cmd[NUM_JOINTS];
   double pos[NUM_JOINTS];
   double vel[NUM_JOINTS];
@@ -126,7 +138,8 @@ private:
   bool running_;
   double _wheel_diameter;
   double _max_speed;
-  double _wheel_angle[NUM_JOINTS];
+
+  double _motor_pos[NUM_JOINTS];
 
   ros::Time curr_update_time, prev_update_time;
 
@@ -135,11 +148,16 @@ private:
   ros::Publisher left_linear_actuator_pos_pub;
   ros::Publisher right_linear_actuator_pos_pub;
 
+  ros::Subscriber left_plunge_pos_sub;
+  ros::Subscriber right_plunge_pos_sub;
+  ros::Publisher left_plunge_pos_pub;
+  ros::Publisher right_plunge_pos_pub;
+
   ros::ServiceServer start_srv_;
   ros::ServiceServer stop_srv_;
 
   // Values can be added here using initializer-list syntax
-  std::vector<std::string> joints {"left_linear_actuator_joint","right_linear_actuator_joint"};
+  std::vector<std::string> joints {"left_linear_actuator_joint","right_linear_actuator_joint", "left_plunge_joint","right_plunge_joint"};
 
   bool start_callback(std_srvs::Empty::Request& /*req*/, std_srvs::Empty::Response& /*res*/)
   { 
@@ -154,11 +172,19 @@ private:
   }
 
   void leftLinearActuatorPosCallBack(const std_msgs::Float64& msg) {
-    _wheel_angle[0] = msg.data;
+    _motor_pos[0] = msg.data;
   }
 
   void rightLinearActuatorPosCallBack(const std_msgs::Float64& msg) {
-    _wheel_angle[1] = msg.data;
+    _motor_pos[1] = msg.data;
+  }
+
+  void leftPlungePosCallBack(const std_msgs::Float64& msg) {
+    _motor_pos[2] = msg.data;
+  }
+
+  void rightPlungePosCallBack(const std_msgs::Float64& msg) {
+    _motor_pos[3] = msg.data;
   }
 
   // void limitDifferentialSpeed(double &diff_speed_left, double &diff_speed_right)
@@ -201,6 +227,8 @@ MyRobotHWInterface::MyRobotHWInterface()
 
       hardware_interface::JointHandle pos_handle(jnt_state_interface.getHandle(os.str()), &cmd[i]);
       jnt_eff_interface.registerHandle(pos_handle);
+
+      jnt_pos_interface
     }
     registerInterface(&jnt_state_interface);
     registerInterface(&jnt_eff_interface);
@@ -211,4 +239,10 @@ MyRobotHWInterface::MyRobotHWInterface()
 
 	left_linear_actuator_pos_sub = nh.subscribe("moony/left_linear_actuator_pos_feedback", 1, &MyRobotHWInterface::leftLinearActuatorPosCallBack, this);
 	right_linear_actuator_pos_sub = nh.subscribe("moony/right_linear_actuator_pos_feedback", 1, &MyRobotHWInterface::rightLinearActuatorPosCallBack, this);
+  
+	left_plunge_pos_pub = nh.advertise<std_msgs::Float64>("moony/left_plunge_eff_cmd", 1);
+	right_plunge_pos_pub = nh.advertise<std_msgs::Float64>("moony/right_plunge_eff_cmd", 1);
+
+	left_plunge_pos_sub = nh.subscribe("moony/left_plunge_pos_feedback", 1, &MyRobotHWInterface::leftPlungePosCallBack, this);
+	right_plunge_pos_sub = nh.subscribe("moony/right_plunge_pos_feedback", 1, &MyRobotHWInterface::rightPlungePosCallBack, this);
 }

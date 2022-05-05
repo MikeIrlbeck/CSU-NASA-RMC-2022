@@ -1,0 +1,13 @@
+https://electronics.stackexchange.com/questions/464970/how-to-demonstrate-the-effect-of-baudrate-in-serial-communication
+
+Mike Irlbeck
+5/5/22
+
+
+
+* Baud rate can be far too slow, it can also be too high
+
+
+We have systems that consist of around 80 sensors which all talk to the host over RS-485 using MODBUS. The host sends a 10-byte command to each sensor, which then responds with an 8-byte packet. Running at 9600 bits per second (ignoring start/stop bits for sake of simplicity) the "round-trip" communication time for the 80 sensors is around 3 seconds. That is much too long for our application as there is a substantial time difference between when the first sensor is read and when the last sensor is read. Therefore we bumped our baud rate up to 115.2 kbps, which reduces the round-trip time to approximately 250 milliseconds. This is still very slow, but it is an order of magnitude faster. We would go to a higher baud rate to reduce the cycle time, but due to run lengths and cable restrictions, going faster than 115.2 kbps could have a negative impact on signal integrity.
+
+Higher baud rate is much preferred for applications where timing is critical. Timing is not as critical when you're simply viewing the results on a terminal because the human brain cannot really recognize small timing variations when reading text.

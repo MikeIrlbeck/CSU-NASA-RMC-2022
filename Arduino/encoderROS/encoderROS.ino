@@ -1,4 +1,4 @@
-#define USE_USBCON
+//#define USE_USBCON
 
 #include <ros.h>
 #include <std_msgs/Int32.h>
