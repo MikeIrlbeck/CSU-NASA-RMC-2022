@@ -68,6 +68,7 @@ float rightLinearActuatorEffCmd = 0;
 
 int leftStickLeftRight; //LS LR
 int leftStickUpDown; //LS UD
+int leftStickUpDownDump;
 int leftTrigger; //LT
 int rightStickLeftRight; //RS LR
 int rightStickUpDown; //RS UD
@@ -125,6 +126,8 @@ void xboxCallback(const sensor_msgs::Joy& joy)
   static int p = 50; // plunge multiplier
   leftStickLeftRight = joy.axes[0] * p; //Left/Right Axis stick left
   leftStickUpDown = joy.axes[1] * p; //Up/Down Axis stick left
+  leftStickUpDownDump = joy.axes[1]; //Up/Down Axis stick left
+
   leftTrigger = -8 * (joy.axes[2] - 1); //Left/Right Axis stick right
   rightStickLeftRight = joy.axes[3] * p; //Up/Down Axis stick right
   rightStickUpDown = joy.axes[4] * 20; //rightTrigger, Ryans comment: RS UD
@@ -302,7 +305,8 @@ void teleOp() {
       }
     }
     else if (buttonB == 1) {
-       dumpBucket.motor(constrain(-leftStickUpDown/10, -8, 8));
+       dumpBucket.motor(-leftStickUpDownDump * 15);
+       //constrain(-leftStickUpDown/10, -8, 8));
     }
     else {
       // drive forward and back
