@@ -10,14 +10,7 @@
 #include <Sabertooth.h>
 #define Teensy41
 
-//for encoders
-// Encoder output to Arduino Interrupt pin. Tracks the tick count.
-#define ENC_IN_LEFT_A 4
-#define ENC_IN_RIGHT_A 33
-// Other encoder output to Arduino to keep track of wheel direction
-// Tracks the direction of rotation.
-#define ENC_IN_LEFT_B 5
-#define ENC_IN_RIGHT_B 34
+
 // True = Forward; False = Reverse
 boolean Direction_left = true;
 boolean Direction_right = true;
@@ -30,21 +23,21 @@ long previousMillis = 0;
 long currentMillis = 0;
  
 int beltSpinPin = 3;
-
-
+int plungeLimitpin = 19;
+int dumpTopLimitpin = 18;
+int dumpBottomLimitpin = 17;
 
 //initialization
 ros::NodeHandle nh;
 std_msgs::Float64 tiltL_msg;
 std_msgs::Float64 tiltR_msg;
-//std_msgs::Int16 encoderL_Aticks;
-//ros::Publisher leftPubA("ENC_IN_LEFT_A", &encoderL_Aticks);
-//std_msgs::Int16 encoderL_Bticks;
-//ros::Publisher leftPubB("ENC_IN_LEFT_B", &encoderL_Bticks);
-//std_msgs::Int16 encoderR_Aticks;
-//ros::Publisher rightPubA("ENC_IN_RIGHT_A", &encoderR_Aticks);
-//std_msgs::Int16 encoderR_Bticks;
-//ros::Publisher rightPubB("ENC_IN_RIGHT_B", &encoderR_Bticks);
+
+std_msgs::Int16 plungeLimit_msg;
+ros::Publisher PlungeLimit("plunge_limit", &plungeLimit_msg);
+std_msgs::Int16 dumpTopLimit_msg;
+ros::Publisher dumpTopLimit("dumpTop_limit", &dumpTopLimit_msg );
+std_msgs::Int16 dumpBottomLimit_msg;
+ros::Publisher dumpBottomLimit("dumpBottom_limit", &dumpBottomLimit_msg );
 
 ros::Publisher TiltL("moony/left_linear_actuator_pos_feedback", &tiltL_msg);
 ros::Publisher TiltR("moony/right_linear_actuator_pos_feedback", &tiltR_msg);
@@ -191,45 +184,38 @@ int movingAverage(int value, char side);
 
 void setup()
 {
-    Serial1.begin(500000); //Baud for ROS
+    Serial1.begin(57600); //Baud for ROS
     Serial2.begin(9600);  //Baud for Sabertooths
     Serial3.begin(9600);
     
       //sets the drive and turn states to 0 so the motors starightTrigger at 0
     stopAllMotors();
-
-
-    
+    pinMode(17, INPUT);  // dump bottom
+    pinMode(18, INPUT); // dump top
+    pinMode(19, INPUT); // plunge limit switch
     pinMode(2, OUTPUT); // PWM for belt speed
     pinMode(3, OUTPUT); // Digital for belt F/R
 
-    //interrupt for encoders
-    pinMode(ENC_IN_LEFT_A , INPUT_PULLUP);
-    pinMode(ENC_IN_LEFT_B , INPUT);
-    pinMode(ENC_IN_RIGHT_A , INPUT_PULLUP);
-    pinMode(ENC_IN_RIGHT_B , INPUT);
+
     // Every time the pin goes high, this is a tick
     
     nh.initNode();
     nh.subscribe(sub);
     nh.subscribe(subLeftActuator);
     nh.subscribe(subRightActuator);
-//    nh.advertise(rightPubA);
-//    nh.advertise(rightPubB);
-//    nh.advertise(leftPubA);
-//    nh.advertise(leftPubB);
     nh.advertise(TiltL);
     nh.advertise(TiltR);
 
     nh.advertise(autonomyLeftLinearActuator);
     nh.advertise(autonomyRightLinearActuator);
-
+    nh.advertise(PlungeLimit);
+    nh.advertise(dumpTopLimit);
+    nh.advertise(dumpBottomLimit);
 
 }
 void loop()
 {
-  //count(counterR, 'R');
-  //count(counterL, 'L');
+
 
   if (teleop) {
     teleOp(); // if teleop mode is selected
@@ -238,14 +224,13 @@ void loop()
     autonomyOp();
   }
 
-
-//  int_msg.data= int(rightLinearActuatorEffCmd);
-//  PlungeL.publish( &int_msg);
-//  tiltL_msg.data = int(analogRead(A13)/10.0);
-//  TiltL.publish( &tiltL_msg );
-//  tiltR_msg.data = int(analogRead(A9)/10.0);
-//  TiltR.publish( &tiltR_msg );
-
+  plungeLimit_msg.data = digitalRead(plungeLimitpin);
+  PlungeLimit.publish( &plungeLimit_msg );
+  dumpTopLimit_msg.data = digitalRead(dumpTopLimitpin);
+  dumpTopLimit.publish( &dumpTopLimit_msg );
+  dumpBottomLimit_msg.data = digitalRead(dumpBottomLimitpin);
+  dumpBottomLimit.publish( &dumpBottomLimit_msg );
+  
   tiltL_msg.data = movingAverage(int(analogRead(A13)), 'L')/10;
   TiltL.publish( &tiltL_msg );
   tiltR_msg.data = movingAverage(int(analogRead(A9)), 'R')/10;
@@ -257,7 +242,7 @@ void loop()
 
 ////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void stopAllMotors() {
-    driveLeftWheels.drive(0);
+    driveLeftWheels.drive(dumpTopLimitpin);
     driveLeftWheels.turn(0);
     left1LinearActuator2Plunge.drive(0);
     left1LinearActuator2Plunge.turn(0);
@@ -305,8 +290,26 @@ void teleOp() {
       }
     }
     else if (buttonB == 1) {
-       dumpBucket.motor(-leftStickUpDownDump * 15);
-       //constrain(-leftStickUpDown/10, -8, 8));
+//      if(digitalRead(dumpBottomLimitpin) == 0){ 
+//        if(digitalRead(dumpTopLimitpin) == 0){
+//          dumpBucket.motor(-leftStickUpDownDump * 15);
+//         //constrain(-leftStickUpDown/10, -8, 8));
+//        }
+//        else{
+//          dumpBucket.motor(0);
+//          delay(1000);
+//          dumpBucket.motor(10);
+//          delay(500);
+//          dumpBucket.motor(0);
+//          delay(200);
+//        }
+//      }
+//      else if (leftStickUpDownDump < 0 ){
+//        dumpBucket.motor(0);
+//      }
+//      else{
+        dumpBucket.motor(-leftStickUpDownDump * 15);
+//      }
     }
     else {
       // drive forward and back
@@ -314,13 +317,7 @@ void teleOp() {
       driveRightWheels.motor(2, leftStickUpDown + rightStickLeftRight);
       driveLeftWheels.motor(1, leftStickUpDown - rightStickLeftRight);
       driveLeftWheels.motor(2, -leftStickUpDown + rightStickLeftRight); // the negative means this motor was wired oppositely
-    
-      // turning
-  //    driveRightWheels.motor(1, -rightStickLeftRight);
-  //    driveRightWheels.motor(2, rightStickLeftRight);
-  //    
-  //    driveLeftWheels.motor(1, -rightStickLeftRight);
-  //    driveLeftWheels.motor(2, rightStickLeftRight); 
+
     }
   
     digitalWrite(beltSpinPin, LOW);
