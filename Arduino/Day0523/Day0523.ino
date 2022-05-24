@@ -23,9 +23,9 @@ long previousMillis = 0;
 long currentMillis = 0;
  
 int beltSpinPin = 3;
-int plungeLimitpin = 35;
-int dumpTopLimitpin = 34;
-int dumpBottomLimitpin = 33;
+int plungeLimitpin = 19;
+int dumpTopLimitpin = 18;
+int dumpBottomLimitpin = 17;
 
 //initialization
 ros::NodeHandle nh;
@@ -190,12 +190,11 @@ void setup()
     
       //sets the drive and turn states to 0 so the motors starightTrigger at 0
     stopAllMotors();
-    pinMode(dumpBottomLimitpin, INPUT);  // dump bottom
-    pinMode(dumpTopLimitpin, INPUT); // dump top
-    pinMode(plungeLimitpin, INPUT); // plunge limit switch
+    pinMode(dumpBottomLimitpin, INPUT_PULLDOWN);  // dump bottom
+    pinMode(dumpTopLimitpin, INPUT_PULLDOWN); // dump top
+    pinMode(plungeLimitpin, INPUT_PULLDOWN); // plunge limit switch
     pinMode(2, OUTPUT); // PWM for belt speed
     pinMode(beltSpinPin, OUTPUT); // Digital for belt F/R
-
 
     // Every time the pin goes high, this is a tick
     
@@ -294,14 +293,25 @@ void teleOp() {
       }
     }
     else if (buttonB == 1) {
-      dumpBucket.motor(-leftStickUpDownDump * 15);
+      int limit = 15;
+      if((dumpBottomLimit_msg.data != 1 && dumpTopLimit_msg.data != 1) /**|| (dumpBottomLimit_msg.data == 1 && dumpTopLimit_msg.data == 1)**/){ 
+        // move normally
+        dumpBucket.motor(-leftStickUpDownDump * 15);
+      }
+      else if(dumpBottomLimit_msg.data == 1 && dumpTopLimit_msg.data == 0) { // at the bottom
+        dumpBucket.motor(constrain(-leftStickUpDownDump * 15, -limit, 0));        
+      }
+      else if(dumpTopLimit_msg.data == 1 && dumpBottomLimit_msg.data == 0) { // at the top
+        dumpBucket.motor(constrain(-leftStickUpDownDump * 15, 0, limit));        
+      }
     }
     else {
       // drive forward and back
-      driveRightWheels.motor(1, -leftStickUpDown - rightStickLeftRight); 
-      driveRightWheels.motor(2, leftStickUpDown + rightStickLeftRight);
-      driveLeftWheels.motor(1, leftStickUpDown - rightStickLeftRight);
-      driveLeftWheels.motor(2, -leftStickUpDown + rightStickLeftRight); // the negative means this motor was wired oppositely
+      int scale = 2;
+      driveRightWheels.motor(1, constrain((-leftStickUpDown - rightStickLeftRight) * scale, -127, 127)); 
+      driveRightWheels.motor(2, constrain((leftStickUpDown + rightStickLeftRight) * scale, -127, 127));
+      driveLeftWheels.motor(1, constrain((leftStickUpDown - rightStickLeftRight) * scale, -127, 127));
+      driveLeftWheels.motor(2, constrain((-leftStickUpDown + rightStickLeftRight) * scale, -127, 127)); // the negative means this motor was wired oppositely
 
     }
   
