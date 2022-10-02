@@ -1,6 +1,49 @@
 # CSU-NASA-RMC-2022
+For easy testing, go to The Construct website and use their free online simulator.  
 
-Mike: these are the commands I have been running to try and create a map from logged data.
+Here are the instructions to run the robot at competition (assuming that you have properly built and sourced ROS and the required packages):
+
+Terminal 1
+	roscore
+
+Terminal 2
+	rosrun joy joy_node 
+
+Terminal 3 
+	roslaunch moony_bringup start_moony.launch
+	OR
+	roslaunch moony_bringup start_moonyWithLidar.launch
+	OR
+	roslaunch moony_bringup start_moonyWithLidarAndBeacon.launch
+
+Terminal 4 - enable communication to the Tensy
+	rosrun rosserial_python serial_node.py /dev/ttyACM1
+
+Terminal 5 - for topic visulization and sending commands
+	rqt
+
+	// see topic monitor
+	// see topic publisher
+	// dynamic reconfigure to change PID parameters
+
+Misc
+
+To view USB ports
+	ls /dev/ | grep USB
+To view ACM ports
+	ls /dev/ | grep ACM
+    
+
+To run the navigation simulation in Gazebo, do the following:
+## Each of the following commands should be performed in sequential order in individual terminals resulting in multiple terminal commands running at one time.
+- roscore
+- roslaunch moony_description rviz_view_move_base.launch # for data visualization
+- roslaunch moony_navigation_gazebo competition_main.launch
+- roslaunch moony_navigation_gazebo gmapping.launch
+- rosrun moony_autonomy_navigate navigate_server.py
+- rosrun moony_autonomy_navigate navigate_client.py
+
+These are the commands I have been running to try and create a map from logged data.
 
 http://wiki.ros.org/slam_gmapping/Tutorials/MappingFromLoggedData
 
